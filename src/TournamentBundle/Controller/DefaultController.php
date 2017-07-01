@@ -2,7 +2,11 @@
 
 namespace TournamentBundle\Controller;
 
-use KMTStudio\TournamentBundle\Document\Tournament;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use TournamentBundle\Document\Tournament;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -12,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class DefaultController
- * @package KMTStudio\TournamentBundle\Controller
+ * @package TournamentBundle\Controller
  * @Route("/tournament")
  */
 class DefaultController extends Controller
@@ -28,7 +32,7 @@ class DefaultController extends Controller
     /**
      * @Route("/create")
      */
-    public function createAction()
+    public function createAction(Request $request)
     {
         $tournament = new Tournament();
 
@@ -36,8 +40,20 @@ class DefaultController extends Controller
         $form = $this->createFormBuilder($tournament)
             ->add('date', DateType::class)
             ->add('name', TextType::class)
+            ->add('save', SubmitType::class, array('label' => 'Add tournament'))
             ->getForm();
 
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $tournament = $form->getData();
+            /** @var DocumentManager $documentManager */
+            $documentManager = $this->get('doctrine_mongodb')->getManager();
+            $documentManager->persist($tournament);
+            $documentManager->flush();
+
+            $this->addFlash('info', 'Tournament added successfully');
+        }
 
         return $this->render('TournamentBundle:Default:new.html.twig', array('form' => $form->createView()));
     }

@@ -7,6 +7,13 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+    <div id="flash_messages">
+        {% for message in app.flashes('info') %}
+            <div class="flash_messages__content">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
     </body>
