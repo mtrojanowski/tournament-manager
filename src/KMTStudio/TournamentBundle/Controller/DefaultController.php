@@ -1,6 +1,6 @@
 <?php
 
-namespace TournamentBundle\Controller;
+namespace KMTStudio\TournamentBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

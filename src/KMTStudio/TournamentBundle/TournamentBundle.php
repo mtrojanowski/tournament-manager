@@ -1,6 +1,6 @@
 <?php
 
-namespace TournamentBundle;
+namespace KMTStudio\TournamentBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
