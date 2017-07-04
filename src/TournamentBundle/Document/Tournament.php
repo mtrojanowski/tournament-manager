@@ -14,7 +14,7 @@ class Tournament
     protected $id;
 
     /**
-     * @MongoDB\Field(type="string")
+     * @MongoDB\Field(type="date")
      */
     protected $date;
 
@@ -46,10 +46,10 @@ class Tournament
     /**
      * Set date
      *
-     * @param string $date
+     * @param \DateTime $date
      * @return $this
      */
-    public function setDate($date)
+    public function setDate(\DateTime $date)
     {
         $this->date = $date;
         return $this;
@@ -58,9 +58,9 @@ class Tournament
     /**
      * Get date
      *
-     * @return string $date
+     * @return \DateTime $date
      */
-    public function getDate()
+    public function getDate():\DateTime
     {
         return $this->date;
     }

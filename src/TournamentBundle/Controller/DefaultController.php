@@ -35,6 +35,7 @@ class DefaultController extends Controller
     public function createAction(Request $request)
     {
         $tournament = new Tournament();
+        $tournament->setDate(new \DateTime());
 
         /** @var FormInterface $form */
         $form = $this->createFormBuilder($tournament)
