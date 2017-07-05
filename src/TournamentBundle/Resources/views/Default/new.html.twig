@@ -7,10 +7,14 @@
         </div>
         {{ form_start(form) }}
         <div class="row">
-            <div class="col-md-4">
-                {{ form_label(form.date) }}
-                {{ form_errors(form.date) }}
-                {{ form_widget(form.date, {'attr': { 'class': 'form-control'}}) }}
+            <div class="col-md-4 ror">
+                <div class="col-md-2 col-sm-2">
+                    {{ form_label(form.date) }}
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    {{ form_errors(form.date) }}
+                    {{ form_widget(form.date) }}
+                </div>
             </div>
         </div>
         <div class="row">
