@@ -1,0 +1,24 @@
+<div id="new_form">
+    {{ form_start(form) }}
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_errors(form.name) }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Name'}}) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_errors(form.country) }}
+            {{ form_widget(form.country, {'attr': {'class': 'form-control', 'placeholder': 'Country'}}) }}
+        </div>
+        <div class="col-md-4">
+            {{ form_errors(form.club) }}
+            {{ form_widget(form.club, {'attr': {'class': 'form-control', 'placeholder': 'Club'}}) }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            {{ form_widget(form.tournamentId) }}
+            {{ form_widget(form.save, {'attr': { 'class': 'btn btn-lg btn-primary'}}) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
+</div>

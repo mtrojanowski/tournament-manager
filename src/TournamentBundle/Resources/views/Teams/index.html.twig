@@ -5,9 +5,7 @@
         <div class="page-header">
             <h1>Add new team to tournament: {{ tournamentName }}</h1>
         </div>
-        <div>
-
-        </div>
+        {{ include('TournamentBundle:Teams:new_team.html.twig', { 'form': newTeamForm }) }}
     </div>
     <hr />
     <div id="players-list">

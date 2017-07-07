@@ -4,9 +4,11 @@ namespace TournamentBundle\Controller;
 
 use Doctrine\ODM\MongoDB\DocumentManager;
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use TournamentBundle\Document\Team;
 use TournamentBundle\Document\Tournament;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -22,46 +24,47 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TeamsController extends Controller
 {
-    /**
-     * @Route("/")
-     */
-    public function indexAction($tournamentId)
+
+    private function getTournament($id):Tournament
     {
         /** @var DocumentRepository $repo */
         $repo = $this->get('doctrine_mongodb')->getRepository('TournamentBundle:Tournament');
         /** @var Tournament $tournament */
-        $tournament = $repo->find($tournamentId);
+        $tournament = $repo->find($id);
 
-        return $this->render('TournamentBundle:Teams:index.html.twig', array('tournamentName' => $tournament->getName()));
+        return $tournament;
+    }
+    /**
+     * @Route("/", name="list_with_add")
+     */
+    public function indexAction($tournamentId)
+    {
+        $tournament = $this->getTournament($tournamentId);
+
+        /** @var FormInterface $form */
+        $form = $this->createFormBuilder(new Team())
+            ->add('name', TextType::class)
+            ->add('country', TextType::class, ['data' => 'Poland'])
+            ->add('club', TextType::class)
+            ->add('tournamentId', HiddenType::class, ['data' => $tournamentId])
+            ->add('save', SubmitType::class, ['label' => 'Add team'])
+            ->setAction($this->generateUrl('add_team', ['tournamentId' => $tournamentId]))
+            ->getForm();
+
+        return $this->render('TournamentBundle:Teams:index.html.twig', [
+            'tournamentName' => $tournament->getName(),
+            'newTeamForm' => $form->createView()
+        ]);
     }
 
     /**
-     * @Route("/create")
+     * @Route("/add", name="add_team")
      */
-    public function createAction(Request $request)
+    public function addTeamAction($tournamentId, Request $request)
     {
-        $tournament = new Tournament();
-        $tournament->setDate(new \DateTime());
+        $tournament = $this->getTournament($tournamentId);
 
-        /** @var FormInterface $form */
-        $form = $this->createFormBuilder($tournament)
-            ->add('date', DateType::class)
-            ->add('name', TextType::class)
-            ->add('save', SubmitType::class, array('label' => 'Add tournament'))
-            ->getForm();
 
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $tournament = $form->getData();
-            /** @var DocumentManager $documentManager */
-            $documentManager = $this->get('doctrine_mongodb')->getManager();
-            $documentManager->persist($tournament);
-            $documentManager->flush();
-
-            $this->addFlash('info', 'Tournament added successfully');
-        }
-
-        return $this->render('TournamentBundle:Default:new.html.twig', array('form' => $form->createView()));
+        return $this->render('TournamentBundle:Default:new.html.twig', []);
     }
 }
