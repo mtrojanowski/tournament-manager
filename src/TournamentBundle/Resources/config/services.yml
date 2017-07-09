@@ -1,0 +1,4 @@
+services:
+#    tournament.example:
+#        class: TournamentBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

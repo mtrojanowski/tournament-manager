@@ -1,0 +1,63 @@
+{% extends 'TournamentBundle:Default:base.html.twig' %}
+
+{% block body %}
+    <div id="add-team-form">
+        <div class="page-header">
+            <h1>Add new team to tournament: {{ tournamentName }}</h1>
+        </div>
+        {{ include('TournamentBundle:Teams:new_team.html.twig', { 'form': newTeamForm }) }}
+    </div>
+    <hr />
+    <div id="players-list">
+        <div class="page-header row">
+            <h1 class="col-md-2 col-lg-2 col-sm-2 col-xs-12">Teams</h1>
+            <div id="start-tournament" class="col-md-3 col-md-offset-7 col-lg-3 col-lg-offset-7 col-sm-3 col-sm-offset-7 col-xs-12">
+                {{ form_start(startTournamentForm) }}
+                {{ form_widget(startTournamentForm.start, {'attr': {'class': 'btn btn-lg btn-success'}}) }}
+                {{ form_end(startTournamentForm) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12, col-md-12, col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <td>#</td>
+                            <td>Name</td>
+                            <td>Country</td>
+                            <td>Club</td>
+                            <td>Confirmed</td>
+                            <td>Actions</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for team in teams %}
+                        <tr>
+                            <td>{{ loop.index }}</td>
+                            <td>{{ team.name }}</td>
+                            <td>{{ team.country }}</td>
+                            <td>{{ team.club }}</td>
+                            <td>
+                                Day 1
+                                    {% if team.confirmedDay1 %} <span class="label label-success">Present</span>
+                                    {% else %}
+                                        <a href="{{ path('confirm_presence', {'tournamentId': team.tournamentId, 'teamId': team.id, 'day': 1}) }}"><span class="label label-warning">Where are they?</span></a>
+                                    {% endif %}
+                                <br/>
+                                Day 2
+                                    {% if team.confirmedDay2 %} <span class="label label-success">Present</span>
+                                    {% else %}
+                                        <a href="{{ path('confirm_presence', {'tournamentId': team.tournamentId, 'teamId': team.id, 'day': 1}) }}"><span class="label label-warning">Where are they?</span></a>
+                                    {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('remove_team', {'tournamentId': team.tournamentId, 'teamId': team.id }) }}" onClick="return confirm('Are you sure you want to remove team `{{ team.name }}`?');">Remove</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

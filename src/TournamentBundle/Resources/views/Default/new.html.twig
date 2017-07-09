@@ -1,0 +1,33 @@
+{% extends 'TournamentBundle:Default:base.html.twig' %}
+
+{% block body %}
+    <div id="new_form">
+        <div class="page-header">
+            <h1>Add new tournament</h1>
+        </div>
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-4 ror">
+                <div class="col-md-2 col-sm-2">
+                    {{ form_label(form.date) }}
+                </div>
+                <div class="col-md-10 col-sm-10">
+                    {{ form_errors(form.date) }}
+                    {{ form_widget(form.date) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_errors(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Name'}}) }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                {{ form_widget(form.save, {'attr': { 'class': 'btn btn-lg btn-primary'}}) }}
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
