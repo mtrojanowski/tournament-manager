@@ -34,6 +34,11 @@ class Tournament
     protected $type;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    protected $status;
+
+    /**
      * Get id
      *
      * @return id $id
@@ -129,5 +134,27 @@ class Tournament
     public function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Set status
+     *
+     * @param string $status
+     * @return $this
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+        return $this;
+    }
+
+    /**
+     * Get status
+     *
+     * @return string $status
+     */
+    public function getStatus()
+    {
+        return $this->status;
     }
 }
