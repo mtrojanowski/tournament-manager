@@ -47,7 +47,10 @@ class DefaultController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Tournament $tournament */
             $tournament = $form->getData();
+            $tournament->setStatus("NEW");
+
             /** @var DocumentManager $documentManager */
             $documentManager = $this->get('doctrine_mongodb')->getManager();
             $documentManager->persist($tournament);

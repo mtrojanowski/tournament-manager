@@ -39,6 +39,11 @@ class Tournament
     protected $status;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    protected $activeRound;
+
+    /**
      * Get id
      *
      * @return id $id
@@ -156,5 +161,27 @@ class Tournament
     public function getStatus()
     {
         return $this->status;
+    }
+
+    /**
+     * Set activeRound
+     *
+     * @param integer $activeRound
+     * @return $this
+     */
+    public function setActiveRound($activeRound)
+    {
+        $this->activeRound = $activeRound;
+        return $this;
+    }
+
+    /**
+     * Get activeRound
+     *
+     * @return integer $activeRound
+     */
+    public function getActiveRound()
+    {
+        return $this->activeRound;
     }
 }

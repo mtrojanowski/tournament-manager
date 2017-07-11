@@ -2,6 +2,8 @@
 namespace TournamentBundle\Document;
 
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\ORM\Mapping\Id;
+
 /**
  * @MongoDB\Document
  */
@@ -65,7 +67,12 @@ class Team
     {
         $this->members = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
+    public function setId(string $id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *

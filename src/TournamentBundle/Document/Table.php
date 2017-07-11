@@ -51,10 +51,10 @@ class Table
     /**
      * Set team1
      *
-     * @param TournamentBundle\Document\TeamResult $team1
+     * @param TeamResult $team1
      * @return $this
      */
-    public function setTeam1(\TournamentBundle\Document\TeamResult $team1)
+    public function setTeam1(TeamResult $team1)
     {
         $this->team1 = $team1;
         return $this;
@@ -63,7 +63,7 @@ class Table
     /**
      * Get team1
      *
-     * @return TournamentBundle\Document\TeamResult $team1
+     * @return TeamResult $team1
      */
     public function getTeam1()
     {
@@ -73,10 +73,10 @@ class Table
     /**
      * Set team2
      *
-     * @param TournamentBundle\Document\TeamResult $team2
+     * @param TeamResult $team2
      * @return $this
      */
-    public function setTeam2(\TournamentBundle\Document\TeamResult $team2)
+    public function setTeam2(TeamResult $team2)
     {
         $this->team2 = $team2;
         return $this;
@@ -85,10 +85,17 @@ class Table
     /**
      * Get team2
      *
-     * @return TournamentBundle\Document\TeamResult $team2
+     * @return TeamResult $team2
      */
     public function getTeam2()
     {
         return $this->team2;
     }
+
+    public function __toString()
+    {
+        return sprintf('Table { no: %s, team1: %s, team2: %s }', $this->tableNo, $this->team1, $this->team2);
+    }
+
+
 }

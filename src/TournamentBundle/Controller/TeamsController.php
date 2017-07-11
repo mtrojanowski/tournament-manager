@@ -25,19 +25,6 @@ use TournamentBundle\Form\TeamType;
  */
 class TeamsController extends TournamentManagerController
 {
-    private function getTournament($id):Tournament
-    {
-        $repo = $this->getTMRepository('Tournament');
-        /** @var Tournament $tournament */
-        $tournament = $repo->find($id);
-
-        if (is_null($tournament)) {
-            throw $this->createNotFoundException('Tournament not found');
-        }
-
-        return $tournament;
-    }
-
     private function getTeam($tournamentId, $teamId):Team
     {
         /** @var Team $team */
