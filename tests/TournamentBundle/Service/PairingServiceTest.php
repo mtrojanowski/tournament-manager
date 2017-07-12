@@ -75,8 +75,6 @@ class PairingServiceTest extends TestCase
             $this->createTable(1, '1', '3'),
             $this->createTable(2, '2', null),
         ];
-print_r($actualResults);
-print_r($expectedPairing);
         $this->compareTables($expectedPairing, $actualResults);
     }
 
@@ -123,9 +121,9 @@ print_r($expectedPairing);
                 sprintf('Team1 at table %s do not match, expected: %s, actual: %s', $actualTable->getTableNo(), $expectedTable->getTeam1()->getTeamId(), $actualTable->getTeam1()->getTeamId())
             );
             $this->assertEquals(
-                !empty($expectedTable->getTeam2()) ? $expectedTable->getTeam2()->getTeamId() : null,
-                !empty($actualTable->getTeam2()) ? $actualTable->getTeam2()->getTeamId() : null,
-                sprintf('Team2 at table %s do not match, expected: %s, actual: %s', $actualTable->getTableNo(), $expectedTable->getTeam2()->getTeamId(), $actualTable->getTeam2()->getTeamId())
+                $expectedTable->getTeam2Id(),
+                $actualTable->getTeam2Id(),
+                sprintf('Team2 at table %s do not match, expected: %s, actual: %s', $actualTable->getTableNo(), $expectedTable->getTeam2Id(), $actualTable->getTeam2Id())
             );
         }
     }

@@ -22,6 +22,7 @@ class Table
     private $team1;
 
     /**
+     * @var TeamResult $team2
      * @MongoDB\EmbedOne(targetDocument="TeamResult")
      */
     private $team2;
@@ -97,5 +98,9 @@ class Table
         return sprintf('Table { no: %s, team1: %s, team2: %s }', $this->tableNo, $this->team1, $this->team2);
     }
 
+    public function getTeam2Id():?int
+    {
+        return $this->team2 !== null ? $this->team2->getTeamId() : null;
+    }
 
 }
