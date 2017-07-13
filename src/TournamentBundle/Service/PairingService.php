@@ -75,6 +75,8 @@ class PairingService
         $teamResult = new TeamResult();
         $teamResult->setTeamId($team->getId());
         $teamResult->setTeamName($team->getName());
+        $teamResult->setTeamClub($team->getClub());
+        $teamResult->setTeamCountry($team->getCountry());
 
         return $teamResult;
     }

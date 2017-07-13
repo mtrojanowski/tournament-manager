@@ -21,6 +21,16 @@ class TeamResult
     private $teamName;
 
     /**
+     * @MongoDB\Field(type="string")
+     */
+    private $teamCountry;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $teamClub;
+
+    /**
      * @MongoDB\Field(type="integer")
      */
     private $matchPoints;
@@ -143,5 +153,49 @@ class TeamResult
     public function getPenalty()
     {
         return $this->penalty;
+    }
+
+    /**
+     * Set teamCountry
+     *
+     * @param string $teamCountry
+     * @return $this
+     */
+    public function setTeamCountry($teamCountry)
+    {
+        $this->teamCountry = $teamCountry;
+        return $this;
+    }
+
+    /**
+     * Get teamCountry
+     *
+     * @return string $teamCountry
+     */
+    public function getTeamCountry()
+    {
+        return $this->teamCountry;
+    }
+
+    /**
+     * Set teamClub
+     *
+     * @param string $teamClub
+     * @return $this
+     */
+    public function setTeamClub($teamClub)
+    {
+        $this->teamClub = $teamClub;
+        return $this;
+    }
+
+    /**
+     * Get teamClub
+     *
+     * @return string $teamClub
+     */
+    public function getTeamClub()
+    {
+        return $this->teamClub;
     }
 }
