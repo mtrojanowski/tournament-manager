@@ -25,8 +25,14 @@
                     </thead>
                     <tbody>
                     {% for table in round.tables %}
+                        {% set alertClass = "" %}
+                        {% if round.roundNo == 1 %}
+                            {% if table.team2 and ((table.team1.teamCountry != 'Poland' and table.team1.teamCountry == table.team2.teamCountry) or (table.team1.teamClub == table.team2.teamClub)) %}
+                                {% set alertClass = "pairing_alert" %}
+                            {% endif %}
+                        {% endif %}
                         <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
-                            <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
+                            <td class="table_no {{ alertClass }}" rowspan="2">{{ table.tableNo }}</td>
                             <td>{{ table.team1.teamName }}</td>
                             <td>{{ table.team1.teamCountry }}</td>
                             <td>{{ table.team1.teamClub }}</td>
