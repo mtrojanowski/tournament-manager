@@ -62,7 +62,7 @@ class TeamsController extends TournamentManagerController
         $startTournamentForm = $this->createFormBuilder()
             ->add('tournamentId', HiddenType::class, ['data' => $tournamentId])
             ->add('start', SubmitType::class, ['label' => 'Start tournament'])
-            ->setAction('')
+            ->setAction($this->generateUrl('start_tournament', ['tournamentId' => $tournamentId]))
             ->getForm();
 
         return $this->render('TournamentBundle:Teams:index.html.twig', [
@@ -76,7 +76,7 @@ class TeamsController extends TournamentManagerController
     /**
      * @Route("/add", name="add_team")
      */
-    public function addTeamAction($tournamentId, Request $request)
+    public function addTeamAction(string $tournamentId, Request $request)
     {
         $tournament = $this->getTournament($tournamentId);
 
@@ -104,7 +104,7 @@ class TeamsController extends TournamentManagerController
     /**
      * @Route("/{teamId}/remove", name="remove_team")
      */
-    public function removeTeamAction($tournamentId, $teamId)
+    public function removeTeamAction(string $tournamentId, string $teamId)
     {
         $tournament = $this->getTournament($tournamentId);
 
@@ -122,7 +122,7 @@ class TeamsController extends TournamentManagerController
     /**
      * @Route("/{teamId}/confirm/{day}", name="confirm_presence")
      * */
-    public function confirmPresenceActon($tournamentId, $teamId, $day)
+    public function confirmPresenceActon(string $tournamentId, string $teamId, int $day)
     {
         $tournament = $this->getTournament($tournamentId);
 

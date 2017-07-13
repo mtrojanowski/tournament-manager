@@ -91,9 +91,9 @@ class Round
     /**
      * Add table
      *
-     * @param TournamentBundle\Document\Table $table
+     * @param Table $table
      */
-    public function addTable(\TournamentBundle\Document\Table $table)
+    public function addTable(Table $table)
     {
         $this->tables[] = $table;
     }
@@ -101,9 +101,9 @@ class Round
     /**
      * Remove table
      *
-     * @param TournamentBundle\Document\Table $table
+     * @param Table $table
      */
-    public function removeTable(\TournamentBundle\Document\Table $table)
+    public function removeTable(Table $table)
     {
         $this->tables->removeElement($table);
     }

@@ -1,0 +1,49 @@
+{% extends 'TournamentBundle:Default:base.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h2>Verify round {{ round.roundNo }}for tournament {{ tournament.name }}</h2>
+    </div>
+    <div id="pairings">
+        <div class="page-header row">
+            <h1 class="col-md-10 col-lg-10 col-sm-10 col-xs-12">Pairings for round {{ round.roundNo }}</h1>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12">
+                <a href="" class="btn btn-lg btn-success">Start round {{ round.roundNo }}</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12, col-md-12, col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Table No</td>
+                        <td>Team name</td>
+                        <td>Country</td>
+                        <td>Club</td>
+                        <td></td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for table in round.tables %}
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
+                            <td>{{ table.team1.teamName }}</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            {% if (table.team2) %}
+                                <td>{{ table.team2.teamName }}</td>
+                                <td></td>
+                                <td></td>
+                            {% else %}
+                                <td colspan="3">&nbsp;</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

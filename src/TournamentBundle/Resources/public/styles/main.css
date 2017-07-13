@@ -6,3 +6,19 @@
     margin-top: 1.43em;
     text-align: right;
 }
+
+.table_row_even {
+    background-color: #f9f9f9 !important;
+}
+
+.table_row_odd {
+    background-color: #ffffff !important;
+}
+
+.table_no {
+    width: 10%;
+    font-size: 3em;
+    font-weight: 400;
+    vertical-align: middle;
+    text-align: center;
+}
