@@ -20,7 +20,7 @@
                         <td>Team name</td>
                         <td>Country</td>
                         <td>Club</td>
-                        <td></td>
+                        <td>Operations</td>
                     </tr>
                     </thead>
                     <tbody>
@@ -36,14 +36,44 @@
                             <td>{{ table.team1.teamName }}</td>
                             <td>{{ table.team1.teamCountry }}</td>
                             <td>{{ table.team1.teamClub }}</td>
+                            <td>
+                                <div class="row operations">
+                                {{ form_start(switchForms[table.tableNo][1]) }}
+                                    Switch with team
+                                {{ form_widget(switchForms[table.tableNo][1].targetTeamNo, {'attr': {'class': 'form-control'}}) }}
+                                    on table
+                                {{ form_widget(switchForms[table.tableNo][1].targetTableNo, {'attr': {'class': 'form-control'}}) }}
+                                {{ form_widget(switchForms[table.tableNo][1].submit, {'attr': {'class': 'btn btn-sm btn-default'}}) }}
+
+
+                                {{ form_widget(switchForms[table.tableNo][1].sourceTableNo) }}
+                                {{ form_widget(switchForms[table.tableNo][1].sourceTeamNo) }}
+                                {{ form_end(switchForms[table.tableNo][1]) }}
+                                </div>
+                            </td>
                         </tr>
                         <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
                             {% if (table.team2) %}
                                 <td>{{ table.team2.teamName }}</td>
                                 <td>{{ table.team2.teamCountry }}</td>
                                 <td>{{ table.team2.teamClub }}</td>
+                                <td>
+                                    <div class="row operations">
+                                        {{ form_start(switchForms[table.tableNo][2]) }}
+                                        Switch with team
+                                        {{ form_widget(switchForms[table.tableNo][2].targetTeamNo, {'attr': {'class': 'form-control'}}) }}
+                                        on table
+                                        {{ form_widget(switchForms[table.tableNo][2].targetTableNo, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_widget(switchForms[table.tableNo][2].submit, {'attr': {'class': 'btn btn-sm btn-default'}}) }}
+
+
+                                        {{ form_widget(switchForms[table.tableNo][2].sourceTableNo) }}
+                                        {{ form_widget(switchForms[table.tableNo][2].sourceTeamNo) }}
+                                        {{ form_end(switchForms[table.tableNo][2]) }}
+                                    </div>
+                                </td>
                             {% else %}
-                                <td colspan="3">&nbsp;</td>
+                                <td colspan="4">&nbsp;</td>
                             {% endif %}
                         </tr>
                     {% endfor %}

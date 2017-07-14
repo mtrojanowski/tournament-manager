@@ -2,7 +2,9 @@
 namespace TournamentBundle\Controller;
 
 use TournamentBundle\Document\Round;
+use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
+use TournamentBundle\Form\SwitchTableType;
 use TournamentBundle\Service\PairingService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -59,8 +61,16 @@ class TournamentController extends TournamentManagerController
     public function verifyRoundAction(string $tournamentId, int $roundNo)
     {
         $tournament = $this->getTournament($tournamentId);
+        /** @var Round $round */
         $round = $this->getTMRepository('Round')->findOneBy(['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
 
-        return $this->render('TournamentBundle:Tournament:verify_round.html.twig', ['tournament' => $tournament, 'round' => $round]);
+        $switchForms = [];
+        foreach ($round->getTables() as $table) {
+            /** @var Table $table */
+            $switchForms[$table->getTableNo()][1] = $this->createForm(SwitchTableType::class, ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 1])->createView();
+            $switchForms[$table->getTableNo()][2] = $this->createForm(SwitchTableType::class, ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 2])->createView();
+        }
+
+        return $this->render('TournamentBundle:Tournament:verify_round.html.twig', ['tournament' => $tournament, 'round' => $round, 'switchForms' => $switchForms]);
     }
 }

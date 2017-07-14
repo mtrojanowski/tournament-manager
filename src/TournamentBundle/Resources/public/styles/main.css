@@ -26,3 +26,17 @@
 .pairing_alert {
     background-color: #FF9A99;
 }
+
+#pairings input.form-control {
+    width: 20px;
+    display: inline;
+}
+
+#pairings .operations {
+    font-size: 0.9em;
+    color: #9e9e9e;
+}
+
+#pairings .operations .btn {
+    margin-left: 15px;
+}
