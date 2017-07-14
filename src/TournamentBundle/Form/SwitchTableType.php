@@ -18,7 +18,7 @@ class SwitchTableType extends AbstractType
             ->add('sourceTableNo', HiddenType::class)
             ->add('sourceTeamNo', HiddenType::class)
             ->add('submit', SubmitType::class, ['label' => 'Switch'])
-            ->setAction('')
+            ->setAction($options['action'])
             ->getForm();
     }
 

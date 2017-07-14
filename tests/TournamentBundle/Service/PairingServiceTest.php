@@ -1,6 +1,7 @@
 <?php
 namespace Tests\TournamentBundle\Service;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
@@ -94,6 +95,31 @@ class PairingServiceTest extends TestCase
         ];
 
         $this->compareTables($expectedPairing, $actualResults);
+    }
+
+    public function testSwitchTablesShouldProperlySwitchTeams()
+    {
+        $tables = new ArrayCollection([
+            $this->createTable(1, '1', '2'),
+            $this->createTable(2, '3', '4'),
+        ]);
+
+        $expectedTables = new ArrayCollection([
+            $this->createTable(1, '1', '3'),
+            $this->createTable(2, '2', '4'),
+        ]);
+
+        $switchData = [
+            'sourceTableNo' => 1,
+            'sourceTeamNo' => 2,
+            'targetTableNo' => 2,
+            'targetTeamNo' => 1,
+        ];
+
+        $service = new PairingService();
+        $actualTables = $service->switchTeams($tables, $switchData);
+
+        $this->assertEquals($expectedTables, $actualTables);
     }
 
     private function compareTables(array $expectedPairing, array $actualResults):void

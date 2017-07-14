@@ -1,6 +1,7 @@
 <?php
 namespace TournamentBundle\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
 use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
@@ -61,16 +62,57 @@ class TournamentController extends TournamentManagerController
     public function verifyRoundAction(string $tournamentId, int $roundNo)
     {
         $tournament = $this->getTournament($tournamentId);
-        /** @var Round $round */
-        $round = $this->getTMRepository('Round')->findOneBy(['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        $switchTableAction = $this->generateUrl('switch_teams', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
 
         $switchForms = [];
         foreach ($round->getTables() as $table) {
             /** @var Table $table */
-            $switchForms[$table->getTableNo()][1] = $this->createForm(SwitchTableType::class, ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 1])->createView();
-            $switchForms[$table->getTableNo()][2] = $this->createForm(SwitchTableType::class, ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 2])->createView();
+            $switchForms[$table->getTableNo()][1] = $this->createForm(
+                SwitchTableType::class,
+                ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 1],
+                ['action' => $switchTableAction]
+            )->createView();
+            $switchForms[$table->getTableNo()][2] = $this->createForm(
+                SwitchTableType::class,
+                ['sourceTableNo' => $table->getTableNo(), 'sourceTeamNo' => 2],
+                ['action' => $switchTableAction]
+            )->createView();
         }
 
         return $this->render('TournamentBundle:Tournament:verify_round.html.twig', ['tournament' => $tournament, 'round' => $round, 'switchForms' => $switchForms]);
+    }
+
+    /**
+     * @Route("/rounds/{roundNo}/switch", name="switch_teams", methods="POST")
+     */
+    public function switchTeams(string $tournamentId, int $roundNo, Request $request)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        $form = $this->createForm(SwitchTableType::class);
+        $form->handleRequest($request);
+        $data = $form->getData();
+
+        /** @var PairingService $pairingService */
+        $pairingService = $this->get('pairingService');
+        $round->setTables($pairingService->switchTeams($round->getTables(), $data));
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($round);
+        $dm->flush();
+
+        $this->addFlash('info', 'Teams switched.');
+
+        return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+    }
+
+    private function getRound(string $tournamentId, int $roundNo):Round
+    {
+        /** @var Round $round */
+        $round = $this->getTMRepository('Round')->findOneBy(['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+        return $round;
     }
 }

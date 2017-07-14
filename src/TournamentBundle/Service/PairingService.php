@@ -2,6 +2,7 @@
 namespace TournamentBundle\Service;
 
 
+use Doctrine\Common\Collections\Collection;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\TeamResult;
@@ -42,6 +43,55 @@ class PairingService
         unset($team);
 
         return $tables;
+    }
+
+    /**
+     * @param Collection $tables Array of Table objects with all pairings
+     * @param array $switchData Data needed to switch teams
+     *
+     * @return Collection Array of Table objects with switched teams;
+     */
+    public function switchTeams(Collection $tables, array $switchData):Collection
+    {
+        $sourceTableIndex = $this->findIndexOfTable($tables, $switchData['sourceTableNo']);
+        $targetTableIndex = $this->findIndexOfTable($tables, $switchData['targetTableNo']);
+
+        if ($switchData['sourceTeamNo'] == 1) {
+            $sourceTeam = $tables[$sourceTableIndex]->getTeam1();
+        } else {
+            $sourceTeam = $tables[$sourceTableIndex]->getTeam2();
+        }
+
+
+        if ($switchData['targetTeamNo'] == 1) {
+            $targetTeam = $tables[$targetTableIndex]->getTeam1();
+        } else {
+            $targetTeam = $tables[$targetTableIndex]->getTeam2();
+        }
+
+        if ($switchData['sourceTeamNo'] == 1) {
+            $tables[$sourceTableIndex]->setTeam1($targetTeam);
+        } else {
+            $tables[$sourceTableIndex]->setTeam2($targetTeam);
+        }
+
+        if ($switchData['targetTeamNo'] == 1) {
+            $tables[$targetTableIndex]->setTeam1($sourceTeam);
+        } else {
+            $tables[$targetTableIndex]->setTeam2($sourceTeam);
+        }
+
+        return $tables;
+    }
+
+    private function findIndexOfTable(Collection $tables, int $tableNo)
+    {
+        foreach ($tables as $i => $table) {
+            /** @var Table $table */
+            if ($table->getTableNo() === $tableNo) {
+                return $i;
+            }
+        }
     }
 
     private function getNextIndex(int $i, array $teams, int $max):int

@@ -1,6 +1,7 @@
 <?php
 namespace TournamentBundle\Document;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 
 /**
@@ -116,5 +117,10 @@ class Round
     public function getTables()
     {
         return $this->tables;
+    }
+
+    public function setTables(Collection $tables)
+    {
+        $this->tables = $tables;
     }
 }
