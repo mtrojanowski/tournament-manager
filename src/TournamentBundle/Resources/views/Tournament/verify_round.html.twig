@@ -2,7 +2,7 @@
 
 {% block body %}
     <div class="page-header">
-        <h2>Verify round {{ round.roundNo }}for tournament {{ tournament.name }}</h2>
+        <h2>Verify round {{ round.roundNo }} for tournament {{ tournament.name }}</h2>
     </div>
     <div id="pairings">
         <div class="page-header row">
@@ -11,7 +11,7 @@
                 <a href="{{ path('round_verified', {'tournamentId': tournament.id, 'roundNo': round.roundNo }) }}" class="btn btn-lg {% if round.verified %}btn-default{% else %}btn-success{% endif %}">Verify round {{ round.roundNo }}</a>
             </div>
             <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12">
-                <a href="" class="btn btn-lg {% if round.verified %}btn-success{% else  %}btn-default{% endif %}">Start round {{ round.roundNo }}</a>
+                <a href="{{ path('start_round', {'tournamentId': tournament.id, 'roundNo': round.roundNo }) }}" class="btn btn-lg {% if round.verified %}btn-success{% else  %}btn-default{% endif %}">Start round {{ round.roundNo }}</a>
             </div>
         </div>
         <div class="row">

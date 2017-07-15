@@ -40,3 +40,40 @@
 #pairings .operations .btn {
     margin-left: 15px;
 }
+
+#timer {
+    font-size: 5em;
+    text-align: center;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    #timer {
+        font-size: 10em;
+    }
+}
+
+@media (min-width: 992px) {
+    #timer {
+        font-size: 15em;
+    }
+}
+
+@media (min-width: 1200px) {
+    #timer {
+        font-size: 20em;
+    }
+}
+
+.timer_description {
+    font-size: 2em;
+}
+
+.timer_description span {
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.time-passed {
+    color: #8B1600;
+}

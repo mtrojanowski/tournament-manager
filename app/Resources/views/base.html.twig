@@ -29,8 +29,13 @@
                 {{ message }}
             </div>
         {% endfor %}
+        {% for message in app.session.flashBag.get('warning') %}
+            <div class="alert alert-warning" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
     </div>
-    <div class="container theme-showcase" role="main">
+    <div class="container" role="main">
         {% block body %}{% endblock %}
     </div>
     {% block javascripts %}{% endblock %}

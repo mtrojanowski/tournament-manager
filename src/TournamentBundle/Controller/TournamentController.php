@@ -41,9 +41,11 @@ class TournamentController extends TournamentManagerController
         $pairings = $pairingService->createPairing($teams, true);
 
         $round = new Round();
-        $round->setRoundNo(1);
-        $round->setTournamentId($tournamentId);
-        $round->setVerified(false);
+        $round
+            ->setRoundNo(1)
+            ->setTournamentId($tournamentId)
+            ->setVerified(false)
+            ->setStarted(false);
 
         foreach ($pairings as $table) {
             $round->addTable($table);
@@ -112,6 +114,12 @@ class TournamentController extends TournamentManagerController
         $tournament = $this->getTournament($tournamentId);
         $round = $this->getRound($tournamentId, $roundNo);
 
+        if ($round->getStarted()) {
+            $this->addFlash('warning', 'This round has already started, yo can\'t switch teams in a started round.');
+
+            return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+        }
+
         $form = $this->createForm(SwitchTableType::class);
         $form->handleRequest($request);
         $data = $form->getData();
@@ -127,6 +135,38 @@ class TournamentController extends TournamentManagerController
         $this->addFlash('info', 'Teams switched.');
 
         return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+    }
+
+    /**
+     * @Route("/rounds/{roundNo}/start", name="start_round")
+     */
+    public function startRoundAction(string $tournamentId, int $roundNo)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        $round
+            ->setStarted(true)
+            ->setStartedAt(time());
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($round);
+        $dm->flush();
+
+        $this->addFlash('info', sprintf('Round %s started.', $roundNo));
+
+        return $this->redirectToRoute('results_for_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+    }
+
+    /**
+     * @Route("/rounds/{roundNo}/results", name="results_for_round")
+     */
+    public function resultsForRoundAction(string $tournamentId, int $roundNo)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        return $this->render('TournamentBundle:Tournament:results.html.twig', ['round' => $round]);
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round

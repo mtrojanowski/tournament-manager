@@ -32,9 +32,20 @@ class Round
     private $verified;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    private $started;
+
+    /**
+     * @MongoDB\Field(type="timestamp")
+     */
+    private $startedAt;
+
+    /**
      * @MongoDB\EmbedMany(targetDocument="Table")
      */
     private $tables;
+
     public function __construct()
     {
         $this->tables = new \Doctrine\Common\Collections\ArrayCollection();
@@ -149,5 +160,49 @@ class Round
     public function getVerified()
     {
         return $this->verified;
+    }
+
+    /**
+     * Set started
+     *
+     * @param boolean $started
+     * @return $this
+     */
+    public function setStarted($started)
+    {
+        $this->started = $started;
+        return $this;
+    }
+
+    /**
+     * Get started
+     *
+     * @return boolean $started
+     */
+    public function getStarted()
+    {
+        return $this->started;
+    }
+
+    /**
+     * Set startedAt
+     *
+     * @param int $startedAt
+     * @return $this
+     */
+    public function setStartedAt($startedAt)
+    {
+        $this->startedAt = $startedAt;
+        return $this;
+    }
+
+    /**
+     * Get startedAt
+     *
+     * @return int $startedAt
+     */
+    public function getStartedAt()
+    {
+        return $this->startedAt;
     }
 }
