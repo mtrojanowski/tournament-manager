@@ -6,9 +6,12 @@
     </div>
     <div id="pairings">
         <div class="page-header row">
-            <h1 class="col-md-10 col-lg-10 col-sm-10 col-xs-12">Pairings for round {{ round.roundNo }}</h1>
+            <h1 class="col-md-8 col-lg-8 col-sm-8 col-xs-12">Pairings for round {{ round.roundNo }}</h1>
             <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12">
-                <a href="" class="btn btn-lg btn-success">Start round {{ round.roundNo }}</a>
+                <a href="{{ path('round_verified', {'tournamentId': tournament.id, 'roundNo': round.roundNo }) }}" class="btn btn-lg {% if round.verified %}btn-default{% else %}btn-success{% endif %}">Verify round {{ round.roundNo }}</a>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12">
+                <a href="" class="btn btn-lg {% if round.verified %}btn-success{% else  %}btn-default{% endif %}">Start round {{ round.roundNo }}</a>
             </div>
         </div>
         <div class="row">

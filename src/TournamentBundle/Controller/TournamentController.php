@@ -86,6 +86,25 @@ class TournamentController extends TournamentManagerController
     }
 
     /**
+     * @Route("/rounds/{roundNo}/verified", name="round_verified")
+     */
+    public function setRoundVerifiedAction(string $tournamentId, int $roundNo)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        $round->setVerified(true);
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($round);
+        $dm->flush();
+
+        $this->addFlash('info', sprintf('Pairings for round %s verified', $roundNo));
+
+        return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+    }
+
+    /**
      * @Route("/rounds/{roundNo}/switch", name="switch_teams", methods="POST")
      */
     public function switchTeams(string $tournamentId, int $roundNo, Request $request)
