@@ -43,6 +43,7 @@ class TournamentController extends TournamentManagerController
         $round = new Round();
         $round->setRoundNo(1);
         $round->setTournamentId($tournamentId);
+        $round->setVerified(false);
 
         foreach ($pairings as $table) {
             $round->addTable($table);

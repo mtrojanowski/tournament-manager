@@ -27,6 +27,11 @@ class Round
     private $roundNo;
 
     /**
+     * @MongoDB\Field(type="boolean")
+     */
+    private $verified;
+
+    /**
      * @MongoDB\EmbedMany(targetDocument="Table")
      */
     private $tables;
@@ -122,5 +127,27 @@ class Round
     public function setTables(Collection $tables)
     {
         $this->tables = $tables;
+    }
+
+    /**
+     * Set verified
+     *
+     * @param boolean $verified
+     * @return $this
+     */
+    public function setVerified($verified)
+    {
+        $this->verified = $verified;
+        return $this;
+    }
+
+    /**
+     * Get verified
+     *
+     * @return boolean $verified
+     */
+    public function getVerified()
+    {
+        return $this->verified;
     }
 }
