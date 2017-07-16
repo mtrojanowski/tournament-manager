@@ -111,6 +111,7 @@ class Table
             'team1Penalty' => $this->team1->getPenalty(),
             'team2MatchPoints' => empty($this->team2) ? null : $this->team2->getMatchPoints() ,
             'team2Penalty' => empty($this->team2) ? null : $this->team2->getPenalty(),
+            'tableNo' => $this->tableNo
         ];
     }
 

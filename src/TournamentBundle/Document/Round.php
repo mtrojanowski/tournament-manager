@@ -140,6 +140,28 @@ class Round
         $this->tables = $tables;
     }
 
+    public function getTable(int $tableNo):?Table
+    {
+        foreach ($this->tables as $table) {
+            /** @var Table $table */
+            if ($table->getTableNo() === $tableNo) {
+                return $table;
+            }
+        }
+
+        return null;
+    }
+
+    public function setTable(int $tableNo, Table $newTable):void
+    {
+        foreach ($this->tables as $i => $table) {
+            /** @var Table $table */
+            if ($table->getTableNo() === $tableNo) {
+                $this->tables[$i] = $newTable;
+            }
+        }
+    }
+
     /**
      * Set verified
      *

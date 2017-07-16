@@ -15,11 +15,11 @@ class TableResultType extends AbstractType
     {
         $builder
             ->add('team1MatchPoints', TextType::class)
-            ->add('team1Penalty', TextType::class)
+            ->add('team1Penalty', TextType::class, ['required' => false])
             ->add('team2MatchPoints', TextType::class)
-            ->add('team2Penalty', TextType::class)
+            ->add('team2Penalty', TextType::class, ['required' => false])
+            ->add('tableNo', HiddenType::class)
             ->add('submit', SubmitType::class, ['label' => 'Submit'])
-            ->setAction($options['action'])
             ->getForm();
     }
 

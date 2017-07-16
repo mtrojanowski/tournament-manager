@@ -6,6 +6,8 @@ parameters:
 services:
     pairingService:
         class: TournamentBundle\Service\PairingService
+    resultsService:
+        class: TournamentBundle\Service\ResultsService
 
     #service_name:
     #    class: AppBundle\Directory\ClassName

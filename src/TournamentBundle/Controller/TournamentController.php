@@ -9,6 +9,7 @@ use TournamentBundle\Form\SwitchTableType;
 use TournamentBundle\Form\TableResultType;
 use TournamentBundle\Service\PairingService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use TournamentBundle\Service\ResultsService;
 
 
 /**
@@ -171,13 +172,44 @@ class TournamentController extends TournamentManagerController
 
         foreach ($round->getTables() as $table) {
             /** @var Table $table */
-            $resultForms[$table->getTableNo()] = $this->createForm(TableResultType::class, $table->getResultsData())->createView();
+            $resultForms[$table->getTableNo()] = $this->createForm(
+                TableResultType::class,
+                $table->getResultsData(),
+                ['action' => $this->generateUrl('set_table_result', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo])]
+            )->createView();
         }
 
         return $this->render(
             'TournamentBundle:Tournament:results.html.twig',
             ['tournament' => $tournament, 'round' => $round, 'resultForms' => $resultForms]
         );
+    }
+
+    /**
+     * @Route("/rounds/{roundNo}/tableResult", name="set_table_result", methods="POST")
+     */
+    public function setTableResults(string $tournamentId, int $roundNo, Request $request)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        /** @var ResultsService $resultsService */
+        $resultsService = $this->get('resultsService');
+
+        $resultsForm = $this->createForm(TableResultType::class);
+        $resultsForm->handleRequest($request);
+        $resultsData = $resultsForm->getData();
+
+        $updatedTable = $resultsService->setTableResult($round->getTable($resultsData['tableNo']), $resultsData);
+        $round->setTable($resultsData['tableNo'], $updatedTable);
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($round);
+        $dm->flush();
+
+        $this->addFlash('info', sprintf('Results for table %s set', $resultsData['tableNo']));
+
+        return $this->redirectToRoute('results_for_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round
