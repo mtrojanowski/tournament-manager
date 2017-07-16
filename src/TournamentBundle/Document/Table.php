@@ -17,6 +17,7 @@ class Table
     private $tableNo;
 
     /**
+     * @var TeamResult $team1
      * @MongoDB\EmbedOne(targetDocument="TeamResult")
      */
     private $team1;
@@ -103,4 +104,18 @@ class Table
         return $this->team2 !== null ? $this->team2->getTeamId() : null;
     }
 
+    public function getResultsData():array
+    {
+        return [
+            'team1MatchPoints' => $this->team1->getMatchPoints(),
+            'team1Penalty' => $this->team1->getPenalty(),
+            'team2MatchPoints' => empty($this->team2) ? null : $this->team2->getMatchPoints() ,
+            'team2Penalty' => empty($this->team2) ? null : $this->team2->getPenalty(),
+        ];
+    }
+
+    public function resultsSet():bool
+    {
+        return $this->team1->getMatchPoints() !== null;
+    }
 }

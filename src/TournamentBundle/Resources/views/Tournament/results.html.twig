@@ -1,7 +1,72 @@
 {% extends 'TournamentBundle:Default:base.html.twig' %}
 
 {% block body %}
-<div>
-
-</div>
+    <div class="page-header">
+        <h2>Enter results for {{ round.roundNo }} for tournament {{ tournament.name }}</h2>
+    </div>
+    <div id="pairings">
+        <div class="page-header row">
+            <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12 col-md-offset-10 col-lg-offset-10 col-sm-offset-10">
+                <a href="" class="btn btn-lg btn-default" disabled="disabled">Finish round</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12, col-md-12, col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td class="pairings_table_no">Table No</td>
+                        <td class="pairings_team_name">Team name</td>
+                        <td class="pairings_team_country">Country</td>
+                        <td class="pairings_team_club">Club</td>
+                        <td class="pairings_operations">Result</td>
+                    </tr>
+                    </thead>
+                </table>
+                    {% for table in round.tables %}
+                        {{ form_start(resultForms[table.tableNo]) }}
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            <td class="table_no {% if table.resultsSet %} results-set {% else %} results-not-set {% endif %}" rowspan="2">{{ table.tableNo }}</td>
+                            <td class="pairings_team_name">{{ table.team1.teamName }}</td>
+                            <td class="pairings_team_country">{{ table.team1.teamCountry }}</td>
+                            <td class="pairings_team_club">{{ table.team1.teamClub }}</td>
+                            <td class="pairings_operations">
+                                <div class="row operations">
+                                    MatchPoints: {{ form_widget(resultForms[table.tableNo].team1MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                    Penalty: {{ form_widget(resultForms[table.tableNo].team1Penalty, {'attr': {'class': 'form-control'}}) }}
+                                    {% if table.team2 == null %}
+                                        {{ form_widget(resultForms[table.tableNo].submit, {'attr': {'class': 'btn btn-sm btn-default btn-bye'}}) }}
+                                        <div class="hidden">
+                                            {{ form_widget(resultForms[table.tableNo].team2MatchPoints) }}
+                                            {{ form_widget(resultForms[table.tableNo].team2Penalty) }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            {% if (table.team2) %}
+                                <td>{{ table.team2.teamName }}</td>
+                                <td>{{ table.team2.teamCountry }}</td>
+                                <td>{{ table.team2.teamClub }}</td>
+                                <td>
+                                    <div class="row operations">
+                                        MatchPoints: {{ form_widget(resultForms[table.tableNo].team2MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                        Penalty: {{ form_widget(resultForms[table.tableNo].team2Penalty, {'attr': {'class': 'form-control'}}) }}
+                                        {{ form_widget(resultForms[table.tableNo].submit, {'attr': {'class': 'btn btn-sm btn-default'}}) }}
+                                    </div>
+                                </td>
+                            {% else %}
+                                <td colspan="4">&nbsp;</td>
+                            {% endif %}
+                        </tr>
+                        </tbody>
+                    </table>
+                        {{ form_end(resultForms[table.tableNo]) }}
+                    {% endfor %}
+            </div>
+        </div>
+    </div>
 {% endblock %}

@@ -77,3 +77,35 @@
 .time-passed {
     color: #8B1600;
 }
+
+.pairings_table_no {
+    width: 10%;
+}
+.pairings_team_name {
+    width: 30%;
+}
+
+.pairings_team_country {
+    width: 15%;
+}
+
+.pairings_team_club {
+    width: 15%;
+}
+
+#pairings .operations .btn {
+    margin-top: -4.5em;
+}
+
+
+#pairings .operations .btn-bye {
+    margin-top: 0;
+}
+
+.results-set {
+    background-color: #BAFFAD;
+}
+
+.results-not-set {
+    background-color: #FFAAB5;
+}

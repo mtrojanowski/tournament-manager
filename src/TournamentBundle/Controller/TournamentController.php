@@ -6,6 +6,7 @@ use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Form\SwitchTableType;
+use TournamentBundle\Form\TableResultType;
 use TournamentBundle\Service\PairingService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
@@ -166,7 +167,17 @@ class TournamentController extends TournamentManagerController
         $tournament = $this->getTournament($tournamentId);
         $round = $this->getRound($tournamentId, $roundNo);
 
-        return $this->render('TournamentBundle:Tournament:results.html.twig', ['round' => $round]);
+        $resultForms = [];
+
+        foreach ($round->getTables() as $table) {
+            /** @var Table $table */
+            $resultForms[$table->getTableNo()] = $this->createForm(TableResultType::class, $table->getResultsData())->createView();
+        }
+
+        return $this->render(
+            'TournamentBundle:Tournament:results.html.twig',
+            ['tournament' => $tournament, 'round' => $round, 'resultForms' => $resultForms]
+        );
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round
