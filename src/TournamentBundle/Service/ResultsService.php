@@ -15,9 +15,11 @@ class ResultsService
         $table->getTeam1()->setBattlePoints($this->countBattlePoints($resultsData['team1MatchPoints']));
         $table->getTeam1()->setPenalty($resultsData['team1Penalty']);
 
-        $table->getTeam2()->setMatchPoints($resultsData['team2MatchPoints']);
-        $table->getTeam2()->setBattlePoints($this->countBattlePoints($resultsData['team2MatchPoints']));
-        $table->getTeam2()->setPenalty($resultsData['team2Penalty']);
+        if ($table->getTeam2() !== null) {
+            $table->getTeam2()->setMatchPoints($resultsData['team2MatchPoints']);
+            $table->getTeam2()->setBattlePoints($this->countBattlePoints($resultsData['team2MatchPoints']));
+            $table->getTeam2()->setPenalty($resultsData['team2Penalty']);
+        }
 
         return $table;
     }

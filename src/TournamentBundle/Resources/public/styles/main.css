@@ -107,5 +107,21 @@
 }
 
 .results-not-set {
-    background-color: #FFAAB5;
+    background-color: #fff548;
+}
+
+.match-points {
+    font-size: 0.75em;
+}
+
+.standings-opponent {
+    font-size: 0.8em;
+}
+
+.standings-opponent-country {
+    font-style: italic;
+}
+
+.standings-round-penalty {
+    color: #AF372E;
 }

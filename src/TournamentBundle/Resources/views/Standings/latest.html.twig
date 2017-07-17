@@ -1,0 +1,57 @@
+{% extends 'TournamentBundle:Default:base.html.twig' %}
+
+{% block body %}
+    {% set round = tournament.activeRound %}
+<div class="page-header">
+    <h2>Latest standings for tournament {{ tournament.name }}</h2>
+    <h3>Current round: {{ round }} (teams with results entered for current round are marked in green)</h3>
+</div>
+<div id="standings" class="row">
+    <div class="col-lg-12, col-md-12, col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td class="">#</td>
+                    <td class="">Team name</td>
+                    <td class="">Country</td>
+                    <td class="">Club</td>
+                    {% for i in 1..round %}
+                        <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span></td>
+                    {% endfor %}
+                    <td class="">Battle Points</td>
+                    <td class="">Match Points</td>
+                    <td class="">Penalty</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for team in teams %}
+                {% set teamResult = team.getResultForRound(round) %}
+                <tr class="">
+                    <td class="">{{ loop.index }}</td>
+                    <td class="{% if teamResult != null %} results-set {% else %} results-not-set {% endif %}">{{ team.name }}</td>
+                    <td class="">{{ team.country }}</td>
+                    <td class="">{{ team.club }}</td>
+                    {% for i in 1..round %}
+                        {% if teamResult != null %}
+                            <td>
+                                {{ teamResult.battlePoints }} <span class="match-points">({{ teamResult.matchPoints }})</span>
+                                {% if teamResult.penalty %}<span class="standings-round-penalty"> -{{ teamResult.penalty }}</span>{% endif %}
+                                <br/>
+                                <span class="standings-opponent">{{ teamResult.teamName }}
+                                    {% if teamResult.teamCountry != null %}<span class="standings-opponent-country">({{ teamResult.teamCountry }})</span>{% endif %}
+                                </span>
+                            </td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                    {% endfor %}
+                    <td class="">{{ team.battlePoints }}</td>
+                    <td class="">{{ team.matchPoints }}</td>
+                    <td class="">{{ team.penaltyPoints }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -90,7 +90,10 @@ class TeamsController extends TournamentManagerController
         if ($form->isValid()) {
             /** @var Team $team */
             $team = $form->getData();
-
+            $team
+                ->setBattlePoints(0)
+                ->setMatchPoints(0)
+                ->setPenaltyPoints(0);
             $dm = $this->getDocumentManager();
             $dm->persist($form->getData());
             $dm->flush();

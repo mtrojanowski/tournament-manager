@@ -1,12 +1,13 @@
 <?php
 namespace TournamentBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use TournamentBundle\Repository\TeamsRepository;
 
 /**
  * Class StandingsController
  * @package TournamentBundle\Controller
- * @Route("/tournaments/{tournamentId}/standings
+ * @Route("/tournaments/{tournamentId}/standings")
  */
 class StandingsController extends TournamentManagerController
 {
@@ -17,7 +18,12 @@ class StandingsController extends TournamentManagerController
     {
         $tournament = $this->getTournament($tournamentId);
 
+        /** @var TeamsRepository $teamRepository */
+        $teamRepository = $this->getTMRepository('Team');
+        $teams = $teamRepository->getStandings($tournamentId);
+
         return $this->render('TournamentBundle:Standings:latest.html.twig', [
+            'tournament' => $tournament,
             'teams' => $teams,
         ]);
     }

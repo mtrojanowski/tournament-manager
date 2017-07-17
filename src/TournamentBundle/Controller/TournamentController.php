@@ -2,6 +2,7 @@
 namespace TournamentBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use TournamentBundle\Document\Result;
 use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
@@ -19,6 +20,8 @@ use TournamentBundle\Service\ResultsService;
  */
 class TournamentController extends TournamentManagerController
 {
+    const BYE = 'bye';
+
     /**
      * @Route("/start", name="start_tournament")
      */
@@ -174,8 +177,10 @@ class TournamentController extends TournamentManagerController
             /** @var Table $table */
             $resultForms[$table->getTableNo()] = $this->createForm(
                 TableResultType::class,
-                $table->getResultsData(),
-                ['action' => $this->generateUrl('set_table_result', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo])]
+                array_merge($table->getResultsData(), ['isBye' => $table->getTeam2() == null]),
+                [
+                    'action' => $this->generateUrl('set_table_result', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]),
+                ]
             )->createView();
         }
 
@@ -203,8 +208,47 @@ class TournamentController extends TournamentManagerController
         $updatedTable = $resultsService->setTableResult($round->getTable($resultsData['tableNo']), $resultsData);
         $round->setTable($resultsData['tableNo'], $updatedTable);
 
+        /** @var Team $team1 */
+        $team1 = $this->getTMRepository('Team')->find($updatedTable->getTeam1()->getTeamId());
+        $team1->setBattlePoints($team1->getBattlePoints() + $updatedTable->getTeam1()->getBattlePoints());
+        $team1->setMatchPoints($team1->getMatchPoints() + $updatedTable->getTeam1()->getMatchPoints());
+        $team1->setPenaltyPoints($team1->getPenaltyPoints() + $updatedTable->getTeam1()->getPenalty());
+
+        $resultForTeam1 = new Result();
+        $resultForTeam1
+            ->setRoundNo($roundNo)
+            ->setMatchPoints($updatedTable->getTeam1()->getMatchPoints())
+            ->setBattlePoints($updatedTable->getTeam1()->getBattlePoints())
+            ->setPenalty($updatedTable->getTeam1()->getPenalty())
+            ->setTeamName($updatedTable->getTeam2() !== null ? $updatedTable->getTeam2()->getTeamName() : self::BYE)
+            ->setTeamCountry($updatedTable->getTeam2() !== null ? $updatedTable->getTeam2()->getTeamCountry() : null);
+
+        $team1->setResultForRound($roundNo, $resultForTeam1);
+
         $dm = $this->getDocumentManager();
         $dm->persist($round);
+        $dm->persist($team1);
+
+        if ($updatedTable->getTeam2() !== null) {
+            /** @var Team $team2 */
+            $team2 = $this->getTMRepository('Team')->find($updatedTable->getTeam2()->getTeamId());
+            $team2->setBattlePoints($team2->getBattlePoints() + $updatedTable->getTeam2()->getBattlePoints());
+            $team2->setMatchPoints($team2->getMatchPoints() + $updatedTable->getTeam2()->getMatchPoints());
+            $team2->setPenaltyPoints($team2->getPenaltyPoints() + $updatedTable->getTeam2()->getPenalty());
+
+            $resultForTeam2 = new Result();
+            $resultForTeam2
+                ->setRoundNo($roundNo)
+                ->setMatchPoints($updatedTable->getTeam2()->getMatchPoints())
+                ->setBattlePoints($updatedTable->getTeam2()->getBattlePoints())
+                ->setPenalty($updatedTable->getTeam2()->getPenalty())
+                ->setTeamName($updatedTable->getTeam1()->getTeamName())
+                ->setTeamCountry($updatedTable->getTeam1()->getTeamCountry());
+
+            $team2->setResultForRound($roundNo, $resultForTeam2);
+            $dm->persist($team2);
+        }
+
         $dm->flush();
 
         $this->addFlash('info', sprintf('Results for table %s set', $resultsData['tableNo']));

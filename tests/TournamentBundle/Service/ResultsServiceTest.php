@@ -38,6 +38,12 @@ class ResultsServiceTest extends TestCase
                 'resultsData' => ['team1MatchPoints' => 51, 'team1Penalty' => 2, 'team2MatchPoints' => 49, 'team2Penalty' => 4],
                 'expectedResult' => $this->createTable(51, 51, 2, 49, 49, 4),
             ],
+            [
+                'table' => $this->createInitialTableWithBye(),
+                'resultsData' => ['team1MatchPoints' => 55, 'team1Penalty' => 0, 'team2MatchPoints' => null, 'team2Penalty' => null],
+                'expectedResult' => $this->createTable(55, 55, 0, null, null, null),
+            ],
+
         ];
     }
 
@@ -51,14 +57,27 @@ class ResultsServiceTest extends TestCase
 
         return $table;
     }
-
-    private function createTable(int $mp1, int $bp1, int $penalty1, int $mp2, int $bp2, int $penalty2):Table
+    private function createInitialTableWithBye():Table
     {
         $table = new Table();
         $table
             ->setTableNo(1)
-            ->setTeam1($this->createTeamResult('1', $mp1, $bp1, $penalty1))
-            ->setTeam2($this->createTeamResult('2', $mp2, $bp2, $penalty2));
+            ->setTeam1($this->createTeamResult('1', null, null, null));
+
+        return $table;
+    }
+
+    private function createTable(int $mp1, int $bp1, int $penalty1, ?int $mp2, ?int $bp2, ?int $penalty2):Table
+    {
+        $table = new Table();
+        $table
+            ->setTableNo(1)
+            ->setTeam1($this->createTeamResult('1', $mp1, $bp1, $penalty1));
+
+        if ($mp2 !== null) {
+            $table->setTeam2($this->createTeamResult('2', $mp2, $bp2, $penalty2));
+        }
+
         return $table;
     }
 

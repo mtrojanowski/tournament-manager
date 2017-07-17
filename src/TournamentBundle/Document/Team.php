@@ -1,11 +1,12 @@
 <?php
 namespace TournamentBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\ORM\Mapping\Id;
 
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="TournamentBundle\Repository\TeamsRepository")
  */
 class Team
 {
@@ -63,9 +64,16 @@ class Team
      * @MongoDB\EmbedMany(targetDocument="Player")
      */
     private $members;
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Result")
+     */
+    private $results;
+
     public function __construct()
     {
-        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->members = new ArrayCollection();
+        $this->results = new ArrayCollection();
     }
 
     public function setId(string $id)
@@ -262,9 +270,9 @@ class Team
     /**
      * Add member
      *
-     * @param TournamentBundle\Document\Player $member
+     * @param Player $member
      */
-    public function addMember(\TournamentBundle\Document\Player $member)
+    public function addMember(Player $member)
     {
         $this->members[] = $member;
     }
@@ -272,9 +280,9 @@ class Team
     /**
      * Remove member
      *
-     * @param TournamentBundle\Document\Player $member
+     * @param Player $member
      */
-    public function removeMember(\TournamentBundle\Document\Player $member)
+    public function removeMember(Player $member)
     {
         $this->members->removeElement($member);
     }
@@ -309,5 +317,65 @@ class Team
     public function getTournamentId()
     {
         return $this->tournamentId;
+    }
+
+    /**
+     * Add result
+     *
+     * @param Result $result
+     */
+    public function addResult(Result $result)
+    {
+        $this->results[] = $result;
+    }
+
+    public function setResultForRound(int $roundNo, Result $newResult)
+    {
+        $resultSet = false;
+
+        foreach ($this->results as $i => $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() === $roundNo) {
+                $resultSet = true;
+                $this->results[$i] = $newResult;
+                break;
+            }
+        }
+
+        if (!$resultSet) {
+            $this->results[] = $newResult;
+        }
+    }
+
+    public function getResultForRound(int $roundNo):?Result
+    {
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() === $roundNo) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove result
+     *
+     * @param Result $result
+     */
+    public function removeResult(Result $result)
+    {
+        $this->results->removeElement($result);
+    }
+
+    /**
+     * Get results
+     *
+     * @return \Doctrine\Common\Collections\Collection $results
+     */
+    public function getResults()
+    {
+        return $this->results;
     }
 }
