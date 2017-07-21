@@ -16,7 +16,10 @@
                     <td class="">Country</td>
                     <td class="">Club</td>
                     {% for i in 1..round %}
-                        <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span></td>
+                        <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span> <span class="standings-round-penalty">-PP</span>
+                        <br/>
+                            <span class="standings-opponent">opponent</span>
+                        </td>
                     {% endfor %}
                     <td class="">Battle Points</td>
                     <td class="">Match Points</td>

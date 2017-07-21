@@ -170,7 +170,7 @@ class TournamentController extends TournamentManagerController
     {
         $tournament = $this->getTournament($tournamentId);
         $round = $this->getRound($tournamentId, $roundNo);
-
+        $canFinishRound = true;
         $resultForms = [];
 
         foreach ($round->getTables() as $table) {
@@ -182,11 +182,15 @@ class TournamentController extends TournamentManagerController
                     'action' => $this->generateUrl('set_table_result', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]),
                 ]
             )->createView();
+
+            if ($canFinishRound && !$table->resultsSet()) {
+                $canFinishRound = false;
+            }
         }
 
         return $this->render(
             'TournamentBundle:Tournament:results.html.twig',
-            ['tournament' => $tournament, 'round' => $round, 'resultForms' => $resultForms]
+            ['tournament' => $tournament, 'round' => $round, 'resultForms' => $resultForms, 'canFinishRound' => $canFinishRound]
         );
     }
 
