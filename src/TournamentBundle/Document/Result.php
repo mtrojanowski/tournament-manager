@@ -33,12 +33,17 @@ class Result
     /**
      * @MongoDB\Field(type="string")
      */
-    private $teamName;
+    private $opponentId;
 
     /**
      * @MongoDB\Field(type="string")
      */
-    private $teamCountry;
+    private $opponentName;
+
+    /**
+     * @MongoDB\Field(type="string")
+     */
+    private $opponentCountry;
 
     /**
      * Set matchPoints
@@ -107,50 +112,6 @@ class Result
     }
 
     /**
-     * Set teamName
-     *
-     * @param string $teamName
-     * @return $this
-     */
-    public function setTeamName($teamName)
-    {
-        $this->teamName = $teamName;
-        return $this;
-    }
-
-    /**
-     * Get teamName
-     *
-     * @return string $teamName
-     */
-    public function getTeamName()
-    {
-        return $this->teamName;
-    }
-
-    /**
-     * Set teamCountry
-     *
-     * @param string $teamCountry
-     * @return $this
-     */
-    public function setTeamCountry($teamCountry)
-    {
-        $this->teamCountry = $teamCountry;
-        return $this;
-    }
-
-    /**
-     * Get teamCountry
-     *
-     * @return string $teamCountry
-     */
-    public function getTeamCountry()
-    {
-        return $this->teamCountry;
-    }
-
-    /**
      * Set roundNo
      *
      * @param integer $roundNo
@@ -170,5 +131,71 @@ class Result
     public function getRoundNo()
     {
         return $this->roundNo;
+    }
+
+    /**
+     * Set opponentId
+     *
+     * @param string $opponentId
+     * @return $this
+     */
+    public function setOpponentId($opponentId)
+    {
+        $this->opponentId = $opponentId;
+        return $this;
+    }
+
+    /**
+     * Get opponentId
+     *
+     * @return string $opponentId
+     */
+    public function getOpponentId()
+    {
+        return $this->opponentId;
+    }
+
+    /**
+     * Set opponentName
+     *
+     * @param string $opponentName
+     * @return $this
+     */
+    public function setOpponentName($opponentName)
+    {
+        $this->opponentName = $opponentName;
+        return $this;
+    }
+
+    /**
+     * Get opponentName
+     *
+     * @return string $opponentName
+     */
+    public function getOpponentName()
+    {
+        return $this->opponentName;
+    }
+
+    /**
+     * Set opponentCountry
+     *
+     * @param string $opponentCountry
+     * @return $this
+     */
+    public function setOpponentCountry($opponentCountry)
+    {
+        $this->opponentCountry = $opponentCountry;
+        return $this;
+    }
+
+    /**
+     * Get opponentCountry
+     *
+     * @return string $opponentCountry
+     */
+    public function getOpponentCountry()
+    {
+        return $this->opponentCountry;
     }
 }

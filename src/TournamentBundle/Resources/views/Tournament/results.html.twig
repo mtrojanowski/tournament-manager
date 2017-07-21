@@ -7,7 +7,7 @@
     <div id="pairings">
         <div class="page-header row">
             <div class="col-md-2 col-lg-2 col-sm-2 col-xs-12 col-md-offset-10 col-lg-offset-10 col-sm-offset-10">
-                <a href="" class="btn btn-lg btn-default" {% if canFinishRound == false %}disabled="disabled"{% endif %}>Finish round</a>
+                <a href="{{ path('finish_round', {'tournamentId': tournament.id, 'roundNo': round.roundNo}) }}" class="btn btn-lg btn-default" {% if canFinishRound == false %}disabled="disabled"{% endif %}>Finish round</a>
             </div>
         </div>
         <div class="row">

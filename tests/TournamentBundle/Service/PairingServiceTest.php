@@ -3,6 +3,7 @@ namespace Tests\TournamentBundle\Service;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
+use TournamentBundle\Document\Result;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\TeamResult;
@@ -122,6 +123,93 @@ class PairingServiceTest extends TestCase
         $this->assertEquals($expectedTables, $actualTables);
     }
 
+    public function testResultsForRoundCreatesValidPairing()
+    {
+        $teams = [
+            $this->createTeamWithResult('1',  '3'),
+            $this->createTeamWithResult('2',  '4'),
+            $this->createTeamWithResult('3', '1'),
+            $this->createTeamWithResult('4', '2'),
+        ];
+
+        $expectedPairing = [
+            $this->createTable(1, '1', '2'),
+            $this->createTable(2, '3', '4')
+        ];
+
+        $service = new PairingService();
+        $actualPairing = $service->createPairing($teams, false);
+
+        $this->compareTables($expectedPairing, $actualPairing);
+    }
+
+    public function testAnotherResultsForRoundCreatesValidPairing()
+    {
+        $teams = [
+            $this->createTeamWithResult('1', '2'),
+            $this->createTeamWithResult('2', '1'),
+            $this->createTeamWithResult('3', '4'),
+            $this->createTeamWithResult('4', '3'),
+        ];
+
+        $expectedPairing = [
+            $this->createTable(1, '1', '3'),
+            $this->createTable(2, '2', '4')
+        ];
+
+        $service = new PairingService();
+        $actualPairing = $service->createPairing($teams, false);
+
+        $this->compareTables($expectedPairing, $actualPairing);
+    }
+
+    public function testResultsForRoundCreatesValidPairingWithBye()
+    {
+        $teams = [
+            $this->createTeamWithResult('1', '2'),
+            $this->createTeamWithResult('5', 'bye'),
+            $this->createTeamWithResult('2', '1'),
+            $this->createTeamWithResult('3', '4'),
+            $this->createTeamWithResult('4', '3'),
+        ];
+
+        $expectedPairing = [
+            $this->createTable(1, '1', '5'),
+            $this->createTable(2, '2', '3'),
+            $this->createTable(3, '4', null),
+        ];
+
+        $service = new PairingService();
+        $actualPairing = $service->createPairing($teams, false);
+
+        $this->compareTables($expectedPairing, $actualPairing);
+    }
+
+
+    public function testResultsForRoundCreatesValidPairingWithTeamsWhoAlreadyPlayedWithEachOther()
+    {
+        $teams = [
+            $this->createTeamWithResult('1', '2'),
+            $this->createTeamWithResult('2', '1'),
+            $this->createTeamWithResult('3', '4'),
+            $this->createTeamWithResult('4', '3'),
+            $this->createTeamWithResult('5', '6'),
+            $this->createTeamWithResult('6', '5'),
+        ];
+
+        $expectedPairing = [
+            $this->createTable(1, '1', '3'),
+            $this->createTable(2, '2', '4'),
+            $this->createTable(3, '5', '6'),
+        ];
+
+        $service = new PairingService();
+        $actualPairing = $service->createPairing($teams, false);
+
+        $this->compareTables($expectedPairing, $actualPairing);
+    }
+
+
     private function compareTables(array $expectedPairing, array $actualResults):void
     {
         $countExpected = count($expectedPairing);
@@ -161,6 +249,19 @@ class PairingServiceTest extends TestCase
         $team->setName($name);
         $team->setCountry($country);
         $team->setClub($club);
+
+        return $team;
+    }
+
+    private function createTeamWithResult(string $id, string $opponent):Team
+    {
+        $result = new Result();
+        $result->setRoundNo(1);
+        $result->setOpponentId($opponent);
+
+        $team = new Team();
+        $team->setId($id);
+        $team->setResultForRound(1, $result);
 
         return $team;
     }

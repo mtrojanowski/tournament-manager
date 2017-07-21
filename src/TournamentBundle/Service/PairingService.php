@@ -3,6 +3,7 @@ namespace TournamentBundle\Service;
 
 
 use Doctrine\Common\Collections\Collection;
+use TournamentBundle\Document\Result;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\TeamResult;
@@ -138,6 +139,13 @@ class PairingService
             }
 
             return $team1->getClub() !== $team2->getClub();
+        }
+
+        foreach ($team1->getResults() as $team1Result) {
+            /** @var Result $team1Result */
+            if ($team1Result->getOpponentId() === $team2->getId()) {
+                return false;
+            }
         }
 
         return true;

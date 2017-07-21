@@ -223,9 +223,18 @@ class TournamentController extends TournamentManagerController
             ->setRoundNo($roundNo)
             ->setMatchPoints($updatedTable->getTeam1()->getMatchPoints())
             ->setBattlePoints($updatedTable->getTeam1()->getBattlePoints())
-            ->setPenalty($updatedTable->getTeam1()->getPenalty())
-            ->setTeamName($updatedTable->getTeam2() !== null ? $updatedTable->getTeam2()->getTeamName() : self::BYE)
-            ->setTeamCountry($updatedTable->getTeam2() !== null ? $updatedTable->getTeam2()->getTeamCountry() : null);
+            ->setPenalty($updatedTable->getTeam1()->getPenalty());
+
+        if ($updatedTable->getTeam2() !== null) {
+            $resultForTeam1
+                ->setOpponentId($updatedTable->getTeam2()->getTeamId())
+                ->setOpponentName($updatedTable->getTeam2()->getTeamName())
+                ->setOpponentCountry($updatedTable->getTeam2()->getTeamCountry());
+        } else {
+            $resultForTeam1
+                ->setOpponentId(self::BYE)
+                ->setOpponentName(self::BYE);
+        }
 
         $team1->setResultForRound($roundNo, $resultForTeam1);
 
@@ -246,8 +255,9 @@ class TournamentController extends TournamentManagerController
                 ->setMatchPoints($updatedTable->getTeam2()->getMatchPoints())
                 ->setBattlePoints($updatedTable->getTeam2()->getBattlePoints())
                 ->setPenalty($updatedTable->getTeam2()->getPenalty())
-                ->setTeamName($updatedTable->getTeam1()->getTeamName())
-                ->setTeamCountry($updatedTable->getTeam1()->getTeamCountry());
+                ->setOpponentId($updatedTable->getTeam1()->getTeamId())
+                ->setOpponentName($updatedTable->getTeam1()->getTeamName())
+                ->setOpponentCountry($updatedTable->getTeam1()->getTeamCountry());
 
             $team2->setResultForRound($roundNo, $resultForTeam2);
             $dm->persist($team2);
@@ -258,6 +268,24 @@ class TournamentController extends TournamentManagerController
         $this->addFlash('info', sprintf('Results for table %s set', $resultsData['tableNo']));
 
         return $this->redirectToRoute('results_for_round', ['tournamentId' => $tournamentId, 'roundNo' => $roundNo]);
+    }
+
+    /**
+     * @Route("/round/{roundNo}/finish", name="finish_round")
+     */
+    public function finishRound(string $tournamentId, int $roundNo)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $round = $this->getRound($tournamentId, $roundNo);
+
+        /*
+         * - set active round to next one
+         * - set round finish time
+         * - calculate pairing for next round
+         * - save old round, new round and  tournament to db
+         * - redirect to verify round action
+         */
+
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round
