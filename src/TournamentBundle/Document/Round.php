@@ -42,6 +42,11 @@ class Round
     private $startedAt;
 
     /**
+     * @MongoDB\Field(type="timestamp")
+     */
+    private $finishedAt;
+
+    /**
      * @MongoDB\EmbedMany(targetDocument="Table")
      */
     private $tables;
@@ -226,5 +231,27 @@ class Round
     public function getStartedAt()
     {
         return $this->startedAt;
+    }
+
+    /**
+     * Set finishedAt
+     *
+     * @param int $finishedAt
+     * @return $this
+     */
+    public function setFinishedAt($finishedAt)
+    {
+        $this->finishedAt = $finishedAt;
+        return $this;
+    }
+
+    /**
+     * Get finishedAt
+     *
+     * @return int $finishedAt
+     */
+    public function getFinishedAt()
+    {
+        return $this->finishedAt;
     }
 }

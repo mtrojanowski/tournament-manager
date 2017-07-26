@@ -8,6 +8,7 @@ use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Form\SwitchTableType;
 use TournamentBundle\Form\TableResultType;
+use TournamentBundle\Repository\TeamsRepository;
 use TournamentBundle\Service\PairingService;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use TournamentBundle\Service\ResultsService;
@@ -278,14 +279,40 @@ class TournamentController extends TournamentManagerController
         $tournament = $this->getTournament($tournamentId);
         $round = $this->getRound($tournamentId, $roundNo);
 
-        /*
-         * - set active round to next one
-         * - set round finish time
-         * - calculate pairing for next round
-         * - save old round, new round and  tournament to db
-         * - redirect to verify round action
-         */
+        $nextRoundNo = $roundNo + 1;
 
+        $tournament->setActiveRound($nextRoundNo);
+        $round->setFinishedAt(time());
+
+        /** @var TeamsRepository $teamsRepository */
+        $teamsRepository = $this->getTMRepository('Team');
+        $teams = $teamsRepository->getTeamsPlaying($tournamentId, $nextRoundNo > 4);
+
+        /** @var PairingService $pairingsService */
+        $pairingsService = $this->get('pairingService');
+        $pairings = $pairingsService->createPairing($teams, false);
+
+        $nextRound = new Round();
+        $nextRound
+            ->setRoundNo($nextRoundNo)
+            ->setTournamentId($tournamentId)
+            ->setVerified(false)
+            ->setStarted(false);
+
+        foreach ($pairings as $table) {
+            $nextRound->addTable($table);
+        }
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($tournament);
+        $dm->persist($round);
+        $dm->persist($nextRound);
+
+        $dm->flush();
+
+        $this->addFlash('info', sprintf('Round %s finished. Pairings for round %s prepared. Please verify pairings.', $roundNo, $nextRoundNo));
+
+        return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $nextRoundNo]);
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round

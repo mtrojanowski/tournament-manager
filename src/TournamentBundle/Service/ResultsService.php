@@ -6,8 +6,8 @@ use TournamentBundle\Document\Table;
 
 class ResultsService
 {
-    const BATTLE_POINTS_MAX_CAP = 60;
-    const BATTLE_POINTS_MIN_CAP = 40;
+    const BATTLE_POINTS_MAX_CAP = 65;
+    const BATTLE_POINTS_MIN_CAP = 35;
 
     public function setTableResult(Table $table, array $resultsData):Table
     {

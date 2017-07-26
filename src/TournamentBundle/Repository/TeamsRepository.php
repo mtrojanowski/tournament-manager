@@ -3,6 +3,7 @@
 namespace TournamentBundle\Repository;
 
 use Doctrine\ODM\MongoDB\DocumentRepository;
+use Doctrine\ODM\MongoDB\Query\Builder;
 
 /**
  * TeamsRepository
@@ -12,13 +13,35 @@ use Doctrine\ODM\MongoDB\DocumentRepository;
  */
 class TeamsRepository extends DocumentRepository
 {
-    public function getStandings(string $tournamentId)
+    private function getStandingsBuilder(string $tournamentId):Builder
     {
         return $this->createQueryBuilder()
             ->field('tournamentId')->equals($tournamentId)
+            ->field('confirmedDay1')->equals(true)
             ->sort('battlePoints', -1)
-            ->sort('matchPoints', -1)
+            ->sort('matchPoints', -1);
+    }
+
+    public function getStandings(string $tournamentId)
+    {
+        return $this->getStandingsBuilder($tournamentId)
             ->getQuery()
-            ->execute();
+            ->execute()
+            ->toArray(false);
+    }
+
+    public function getTeamsPlaying(string $tournamentId, bool $dayTwo)
+    {
+        $builder = $this->getStandingsBuilder($tournamentId);
+
+        if ($dayTwo) {
+            $builder
+                ->field('confirmedDay2')->equals(true);
+        }
+
+        return $builder
+            ->getQuery()
+            ->execute()
+            ->toArray(false);
     }
 }

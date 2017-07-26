@@ -40,8 +40,8 @@
                                 {{ teamResult.battlePoints }} <span class="match-points">({{ teamResult.matchPoints }})</span>
                                 {% if teamResult.penalty %}<span class="standings-round-penalty"> -{{ teamResult.penalty }}</span>{% endif %}
                                 <br/>
-                                <span class="standings-opponent">{{ teamResult.teamName }}
-                                    {% if teamResult.teamCountry != null %}<span class="standings-opponent-country">({{ teamResult.teamCountry }})</span>{% endif %}
+                                <span class="standings-opponent">{{ teamResult.opponentName }}
+                                    {% if teamResult.opponentCountry != null %}<span class="standings-opponent-country">({{ teamResult.opponentCountry }})</span>{% endif %}
                                 </span>
                             </td>
                         {% else %}

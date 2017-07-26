@@ -3,6 +3,7 @@ namespace TournamentBundle\Service;
 
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ODM\MongoDB\Cursor;
 use TournamentBundle\Document\Result;
 use TournamentBundle\Document\Table;
 use TournamentBundle\Document\Team;
