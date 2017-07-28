@@ -12,7 +12,7 @@ use TournamentBundle\Document\Tournament;
  */
 class DMPController extends TournamentManagerController
 {
-    const TOURNAMENT_ID = "596a8bd565db26000d7b7a01";
+    const TOURNAMENT_ID = "597b3fe3fe9c9c000d0a3c01";
     const TIME_FOR_ROUND = "+3 hours 15 minutes";
 
     /** @var Tournament */

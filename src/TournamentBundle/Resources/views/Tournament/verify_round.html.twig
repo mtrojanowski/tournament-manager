@@ -21,26 +21,36 @@
                     <tr>
                         <td>Table No</td>
                         <td>Team name</td>
+                        <td>Points - BP <span class="match-points">(MP)</span></td>
                         <td>Country</td>
                         <td>Club</td>
+                        <td>Previous opponents</td>
                         <td>Operations</td>
                     </tr>
                     </thead>
                     <tbody>
                     {% for table in round.tables %}
                         {% set alertClass = "" %}
+                        {% set team1 = teams[table.team1.teamId] %}
                         {% if round.roundNo == 1 %}
                             {% if table.team2 and ((table.team1.teamCountry != 'Poland' and table.team1.teamCountry == table.team2.teamCountry) or (table.team1.teamCountry == 'Poland' and table.team1.teamClub == table.team2.teamClub)) %}
                                 {% set alertClass = "pairing_alert" %}
                             {% endif %}
                         {% else %}
-
+                            {% if table.team2 and team1.canPlayTogetherWith(teams[table.team2.teamId], round.roundNo > 1) == false %}
+                                {% set alertClass = "pairing_alert" %}
+                            {% endif %}
+                            {% if table.team2 == null and team1.hadByeBefore == true %}
+                                {% set alertClass = "pairing_alert" %}
+                            {% endif %}
                         {% endif %}
                         <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
                             <td class="table_no {{ alertClass }}" rowspan="2">{{ table.tableNo }}</td>
-                            <td>{{ table.team1.teamName }}</td>
+                            <td class="verify-round-team-name">{{ table.team1.teamName }}</td>
+                            <td>{{ team1.battlePoints }} <span class="match-points">({{ team1.matchPoints }})</span></td>
                             <td>{{ table.team1.teamCountry }}</td>
                             <td>{{ table.team1.teamClub }}</td>
+                            <td class="opponents">{{ team1.opponents }}</td>
                             <td>
                                 <div class="row operations">
                                 {{ form_start(switchForms[table.tableNo][1]) }}
@@ -59,9 +69,12 @@
                         </tr>
                         <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
                             {% if (table.team2) %}
-                                <td>{{ table.team2.teamName }}</td>
+                                {% set team2 = teams[table.team2.teamId] %}
+                                <td class="verify-round-team-name">{{ table.team2.teamName }}</td>
+                                <td>{{ team2.battlePoints }} <span class="match-points">({{ team2.matchPoints }})</span></td>
                                 <td>{{ table.team2.teamCountry }}</td>
                                 <td>{{ table.team2.teamClub }}</td>
+                                <td class="opponents">{{ team2.opponents }}</td>
                                 <td>
                                     <div class="row operations">
                                         {{ form_start(switchForms[table.tableNo][2]) }}

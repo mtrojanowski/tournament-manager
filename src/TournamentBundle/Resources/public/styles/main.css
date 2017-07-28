@@ -126,3 +126,11 @@
     color: #AF372E;
     font-size: 0.8em;
 }
+
+.opponents {
+    color: #9a9a9a;
+}
+
+.verify-round-team-name {
+    font-weight: 600;
+}

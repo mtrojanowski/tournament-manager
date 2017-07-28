@@ -4,6 +4,8 @@ namespace TournamentBundle\Document;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
 use Doctrine\ORM\Mapping\Id;
+use TournamentBundle\Controller\TournamentController;
+use TournamentBundle\Service\PairingService;
 
 /**
  * @MongoDB\Document(repositoryClass="TournamentBundle\Repository\TeamsRepository")
@@ -84,7 +86,7 @@ class Team
     /**
      * Get id
      *
-     * @return id $id
+     * @return string $id
      */
     public function getId()
     {
@@ -377,5 +379,46 @@ class Team
     public function getResults()
     {
         return $this->results;
+    }
+
+    public function canPlayTogetherWith(Team $team2, bool $isFirstRound):bool {
+        if ($isFirstRound) {
+            if ($this->getCountry() !== PairingService::POLAND) {
+                return $this->getCountry() !== $team2->getCountry();
+            }
+
+            return $this->getClub() !== $team2->getClub();
+        }
+
+        foreach ($this->getResults() as $team1Result) {
+            /** @var Result $team1Result */
+            if ($team1Result->getOpponentId() === $team2->getId()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function hadByeBefore():bool {
+        foreach ($this->getResults() as $team1Result) {
+            /** @var Result $team1Result */
+            if ($team1Result->getOpponentId() === TournamentController::BYE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getOpponents()
+    {
+        $opponents = [];
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            $opponents[] = $result->getOpponentName();
+        }
+
+        return implode(', ', $opponents);
     }
 }

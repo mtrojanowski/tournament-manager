@@ -31,7 +31,7 @@ class ResultsServiceTest extends TestCase
             [
                 'table' => $this->createInitialTable(),
                 'resultsData' => ['team1MatchPoints' => 25, 'team1Penalty' => 0, 'team2MatchPoints' => 75, 'team2Penalty' => 0],
-                'expectedResult' => $this->createTable(25, 40, 0, 75, 60, 0),
+                'expectedResult' => $this->createTable(25, 35, 0, 75, 65, 0),
             ],
             [
                 'table' => $this->createInitialTable(),

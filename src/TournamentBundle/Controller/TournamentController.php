@@ -90,7 +90,18 @@ class TournamentController extends TournamentManagerController
             )->createView();
         }
 
-        return $this->render('TournamentBundle:Tournament:verify_round.html.twig', ['tournament' => $tournament, 'round' => $round, 'switchForms' => $switchForms]);
+        /** @var TeamsRepository $teamsRepository */
+        $teamsRepository = $this->getTMRepository('Team');
+        $teams = $teamsRepository->getTeamsPlaying($tournamentId, $roundNo > 5);
+
+        $teamsIndexed = [];
+
+        foreach ($teams as $team) {
+            /** @var Team $team */
+            $teamsIndexed[$team->getId()] = $team;
+        }
+
+        return $this->render('TournamentBundle:Tournament:verify_round.html.twig', ['tournament' => $tournament, 'round' => $round, 'switchForms' => $switchForms, 'teams' => $teamsIndexed]);
     }
 
     /**

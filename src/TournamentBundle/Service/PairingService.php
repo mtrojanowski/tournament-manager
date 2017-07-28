@@ -133,31 +133,12 @@ class PairingService
         return $teamResult;
     }
 
-    private function teamsCanPlayTogether(Team $team1, Team $team2, bool $isFirstRound):bool {
-        if ($isFirstRound) {
-            if ($team1->getCountry() !== PairingService::POLAND) {
-                return $team1->getCountry() !== $team2->getCountry();
-            }
-
-            return $team1->getClub() !== $team2->getClub();
-        }
-
-        foreach ($team1->getResults() as $team1Result) {
-            /** @var Result $team1Result */
-            if ($team1Result->getOpponentId() === $team2->getId()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     private function findFirstPossibleOpponent(Team $team, int $originalOpponent, array $teams, int $offset, bool $isFirstRound, int $max):int
     {
         $nextOpponentIndex = $offset;
         $possibleOpponent = $teams[$nextOpponentIndex];
 
-        while (!$this->teamsCanPlayTogether($team, $possibleOpponent, $isFirstRound)) {
+        while (!$team->canPlayTogetherWith($possibleOpponent, $isFirstRound)) {
             $nextOpponentIndex = $this->getNextIndex($nextOpponentIndex, $teams, $max);
 
             if ($nextOpponentIndex === -1) {
