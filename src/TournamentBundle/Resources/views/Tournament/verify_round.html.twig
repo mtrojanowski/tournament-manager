@@ -37,7 +37,7 @@
                                 {% set alertClass = "pairing_alert" %}
                             {% endif %}
                         {% else %}
-                            {% if table.team2 and team1.canPlayTogetherWith(teams[table.team2.teamId], round.roundNo > 1) == false %}
+                            {% if table.team2 and team1.canPlayTogetherWith(teams[table.team2.teamId], false) == false %}
                                 {% set alertClass = "pairing_alert" %}
                             {% endif %}
                             {% if table.team2 == null and team1.hadByeBefore == true %}
@@ -50,7 +50,7 @@
                             <td>{{ team1.battlePoints }} <span class="match-points">({{ team1.matchPoints }})</span></td>
                             <td>{{ table.team1.teamCountry }}</td>
                             <td>{{ table.team1.teamClub }}</td>
-                            <td class="opponents">{{ team1.opponents }}</td>
+                            <td class="opponents">{% for opponent in team1.opponents %}{{ opponent }}{% if loop.index != round.roundNo - 1 %},<br/>{% endif %}{% endfor %}</td>
                             <td>
                                 <div class="row operations">
                                 {{ form_start(switchForms[table.tableNo][1]) }}
@@ -74,7 +74,7 @@
                                 <td>{{ team2.battlePoints }} <span class="match-points">({{ team2.matchPoints }})</span></td>
                                 <td>{{ table.team2.teamCountry }}</td>
                                 <td>{{ table.team2.teamClub }}</td>
-                                <td class="opponents">{{ team2.opponents }}</td>
+                                <td class="opponents">{% for opponent in team2.opponents %}{{ opponent }}{% if loop.index != round.roundNo - 1 %},<br/>{% endif %}{% endfor %}</td>
                                 <td>
                                     <div class="row operations">
                                         {{ form_start(switchForms[table.tableNo][2]) }}
@@ -91,7 +91,7 @@
                                     </div>
                                 </td>
                             {% else %}
-                                <td colspan="4">&nbsp;</td>
+                                <td colspan="6">&nbsp;</td>
                             {% endif %}
                         </tr>
                     {% endfor %}

@@ -419,6 +419,6 @@ class Team
             $opponents[] = $result->getOpponentName();
         }
 
-        return implode(', ', $opponents);
+        return $opponents;
     }
 }

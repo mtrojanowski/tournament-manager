@@ -47,7 +47,7 @@
                                 Day 2
                                     {% if team.confirmedDay2 %} <span class="label label-success">Present</span>
                                     {% else %}
-                                        <a href="{{ path('confirm_presence', {'tournamentId': team.tournamentId, 'teamId': team.id, 'day': 1}) }}"><span class="label label-warning">Where are they?</span></a>
+                                        <a href="{{ path('confirm_presence', {'tournamentId': team.tournamentId, 'teamId': team.id, 'day': 2}) }}"><span class="label label-warning">Where are they?</span></a>
                                     {% endif %}
                             </td>
                             <td>

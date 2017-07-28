@@ -131,6 +131,10 @@
     color: #9a9a9a;
 }
 
+td.opponents {
+    width: 20%;
+}
+
 .verify-round-team-name {
     font-weight: 600;
 }
