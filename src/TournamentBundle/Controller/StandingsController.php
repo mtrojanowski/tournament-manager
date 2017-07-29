@@ -27,4 +27,21 @@ class StandingsController extends TournamentManagerController
             'teams' => $teams,
         ]);
     }
+
+    /**
+     * @Route("/final", name="final_standings")
+     */
+    public function finalStandings(string $tournamentId)
+    {
+        $tournament = $this->getTournament($tournamentId);
+
+        /** @var TeamsRepository $teamRepository */
+        $teamRepository = $this->getTMRepository('Team');
+        $teams = $teamRepository->getFinalStandings($tournamentId);
+
+        return $this->render('TournamentBundle:Standings:final.html.twig', [
+            'tournament' => $tournament,
+            'teams' => $teams
+        ]);
+    }
 }

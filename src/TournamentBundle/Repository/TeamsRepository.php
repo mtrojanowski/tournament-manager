@@ -13,15 +13,6 @@ use Doctrine\ODM\MongoDB\Query\Builder;
  */
 class TeamsRepository extends DocumentRepository
 {
-    private function getStandingsBuilder(string $tournamentId):Builder
-    {
-        return $this->createQueryBuilder()
-            ->field('tournamentId')->equals($tournamentId)
-            ->field('confirmedDay1')->equals(true)
-            ->sort('battlePoints', -1)
-            ->sort('matchPoints', -1);
-    }
-
     public function getStandings(string $tournamentId)
     {
         return $this->getStandingsBuilder($tournamentId)
@@ -44,4 +35,28 @@ class TeamsRepository extends DocumentRepository
             ->execute()
             ->toArray(false);
     }
+
+    public function getFinalStandings(string $tournamentId)
+    {
+        return $this->createQueryBuilder()
+            ->field('tournamentId')->equals($tournamentId)
+            ->field('confirmedDay1')->equals(true)
+            ->sort('finalBattlePoints', -1)
+            ->sort('battlePoints', -1)
+            ->sort('matchPoints', -1)
+            ->getQuery()
+            ->execute()
+            ->toArray(false);
+
+    }
+
+    private function getStandingsBuilder(string $tournamentId):Builder
+    {
+        return $this->createQueryBuilder()
+            ->field('tournamentId')->equals($tournamentId)
+            ->field('confirmedDay1')->equals(true)
+            ->sort('battlePoints', -1)
+            ->sort('matchPoints', -1);
+    }
+
 }

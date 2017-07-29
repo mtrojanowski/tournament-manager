@@ -58,6 +58,11 @@ class Team
     private $matchPoints;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $finalBattlePoints;
+
+    /**
      * @MongoDB\Field(type="string")
      */
     private $club;
@@ -347,6 +352,8 @@ class Team
         if (!$resultSet) {
             $this->results[] = $newResult;
         }
+
+        $this->recalculateResults();
     }
 
     public function getResultForRound(int $roundNo):?Result
@@ -420,5 +427,43 @@ class Team
         }
 
         return $opponents;
+    }
+
+    /**
+     * Set finalMatchPoints
+     *
+     * @param integer $finalBattlePoints
+     * @return $this
+     */
+    public function setFinalBattlePoints($finalBattlePoints)
+    {
+        $this->finalBattlePoints = $finalBattlePoints;
+        return $this;
+    }
+
+    /**
+     * Get finalBattlePoints
+     *
+     * @return integer $finalBattlePoints
+     */
+    public function getFinalBattlePoints()
+    {
+        return $this->finalBattlePoints;
+    }
+
+    private function recalculateResults()
+    {
+        $this->battlePoints = 0;
+        $this->matchPoints = 0;
+        $this->penaltyPoints = 0;
+        $this->finalBattlePoints = 0;
+
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            $this->battlePoints += $result->getBattlePoints();
+            $this->matchPoints += $result->getMatchPoints();
+            $this->penaltyPoints += $result->getPenalty();
+            $this->finalBattlePoints += $result->getBattlePoints() - $result->getPenalty();
+        }
     }
 }

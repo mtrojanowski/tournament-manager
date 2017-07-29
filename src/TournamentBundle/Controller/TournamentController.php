@@ -32,7 +32,7 @@ class TournamentController extends TournamentManagerController
 
         $dm = $this->getDocumentManager();
 
-        $tournament->setStatus("STARTED");
+        $tournament->setStatus('STARTED');
         $tournament->setActiveRound(1);
         $dm->persist($tournament);
 
@@ -226,9 +226,11 @@ class TournamentController extends TournamentManagerController
 
         /** @var Team $team1 */
         $team1 = $this->getTMRepository('Team')->find($updatedTable->getTeam1()->getTeamId());
-        $team1->setBattlePoints($team1->getBattlePoints() + $updatedTable->getTeam1()->getBattlePoints());
-        $team1->setMatchPoints($team1->getMatchPoints() + $updatedTable->getTeam1()->getMatchPoints());
-        $team1->setPenaltyPoints($team1->getPenaltyPoints() + $updatedTable->getTeam1()->getPenalty());
+//        $team1
+//            ->setBattlePoints($team1->getBattlePoints() + $updatedTable->getTeam1()->getBattlePoints())
+//            ->setMatchPoints($team1->getMatchPoints() + $updatedTable->getTeam1()->getMatchPoints())
+//            ->setPenaltyPoints($team1->getPenaltyPoints() + $updatedTable->getTeam1()->getPenalty())
+//            ->setFinalBattlePoints($team1->getFinalBattlePoints() + $updatedTable->getTeam1()->getBattlePoints() - $updatedTable->getTeam1()->getPenalty());
 
         $resultForTeam1 = new Result();
         $resultForTeam1
@@ -257,9 +259,11 @@ class TournamentController extends TournamentManagerController
         if ($updatedTable->getTeam2() !== null) {
             /** @var Team $team2 */
             $team2 = $this->getTMRepository('Team')->find($updatedTable->getTeam2()->getTeamId());
-            $team2->setBattlePoints($team2->getBattlePoints() + $updatedTable->getTeam2()->getBattlePoints());
-            $team2->setMatchPoints($team2->getMatchPoints() + $updatedTable->getTeam2()->getMatchPoints());
-            $team2->setPenaltyPoints($team2->getPenaltyPoints() + $updatedTable->getTeam2()->getPenalty());
+//            $team2
+//                ->setBattlePoints($team2->getBattlePoints() + $updatedTable->getTeam2()->getBattlePoints())
+//                ->setMatchPoints($team2->getMatchPoints() + $updatedTable->getTeam2()->getMatchPoints())
+//                ->setPenaltyPoints($team2->getPenaltyPoints() + $updatedTable->getTeam2()->getPenalty())
+//                ->setFinalBattlePoints($team2->getFinalBattlePoints() + $updatedTable->getTeam2()->getBattlePoints() - $updatedTable->getTeam2()->getPenalty());
 
             $resultForTeam2 = new Result();
             $resultForTeam2
@@ -324,6 +328,23 @@ class TournamentController extends TournamentManagerController
         $this->addFlash('info', sprintf('Round %s finished. Pairings for round %s prepared. Please verify pairings.', $roundNo, $nextRoundNo));
 
         return $this->redirectToRoute('verify_round', ['tournamentId' => $tournamentId, 'roundNo' => $nextRoundNo]);
+    }
+
+    /**
+     * @Route("/finish", name="finish_tournament")
+     */
+    public function finishTournament(string $tournamentId)
+    {
+        $tournament = $this->getTournament($tournamentId);
+        $tournament->setStatus('FINISHED');
+
+        $dm = $this->getDocumentManager();
+        $dm->persist($tournament);
+        $dm->flush();
+
+        $this->addFlash('info', 'Tournament finished');
+
+        return $this->redirectToRoute('final_standings', ['tournamentId' => $tournamentId]);
     }
 
     private function getRound(string $tournamentId, int $roundNo):Round
