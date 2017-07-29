@@ -27,6 +27,14 @@ class DMPController extends TournamentManagerController
     }
 
     /**
+     * @Route("/pairings/{round}")
+     */
+    public function pairingsForRoundAction(int $round)
+    {
+        return $this->pairings('TournamentBundle:DMP:pairings.html.twig', $round);
+    }
+
+    /**
      * @Route("/projector_pairings")
      */
     public function currentProjectorPairingsAction()
@@ -52,23 +60,32 @@ class DMPController extends TournamentManagerController
 
     private function getCurrentRound():Round
     {
+        return $this->getRound($this->dmp->getActiveRound());
+    }
+
+    private function getRound(int $roundNo):Round
+    {
         /** @var Round $round */
         $round = $this->getTMRepository('Round')
-            ->findOneBy(['tournamentId' => self::TOURNAMENT_ID, 'roundNo' => $this->dmp->getActiveRound()]);
+            ->findOneBy(['tournamentId' => self::TOURNAMENT_ID, 'roundNo' => $roundNo]);
 
         return $round;
     }
 
-    private function pairings(string $templateName)
+    private function pairings(string $templateName, int $roundNo = null)
     {
         $this->setDMP();
-        $round = $this->getCurrentRound();
+        if (empty($roundNo)) {
+            $round = $this->getCurrentRound();
+        } else {
+            $round = $this->getRound($roundNo);
+        }
 
         return $this->render(
             $templateName,
             [
                 'pairings' => $round->getTables(),
-                'roundNo' => $this->dmp->getActiveRound(),
+                'roundNo' => $roundNo,
                 'roundVerified' => $round->getVerified(),
                 'numPairings' => count($round->getTables())
             ]);
