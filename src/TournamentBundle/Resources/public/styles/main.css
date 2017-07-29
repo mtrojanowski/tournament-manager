@@ -138,3 +138,15 @@ td.opponents {
 .verify-round-team-name {
     font-weight: 600;
 }
+
+.projector {
+}
+
+.projector-header {
+    margin: 5px;
+}
+
+.projector-header h2 {
+    font-size: 1.2em;
+    font-weight: 500;
+}
