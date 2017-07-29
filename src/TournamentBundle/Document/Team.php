@@ -451,6 +451,26 @@ class Team
         return $this->finalBattlePoints;
     }
 
+    public function recalculateResultsForRound(int $round)
+    {
+        $this->battlePoints = 0;
+        $this->matchPoints = 0;
+        $this->penaltyPoints = 0;
+        $this->finalBattlePoints = 0;
+
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() > $round) {
+                continue;
+            }
+
+            $this->battlePoints += $result->getBattlePoints();
+            $this->matchPoints += $result->getMatchPoints();
+            $this->penaltyPoints += $result->getPenalty();
+            $this->finalBattlePoints += $result->getBattlePoints() - $result->getPenalty();
+        }
+    }
+
     private function recalculateResults()
     {
         $this->battlePoints = 0;

@@ -3,7 +3,9 @@ namespace TournamentBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
 use TournamentBundle\Document\Round;
+use TournamentBundle\Document\Team;
 use TournamentBundle\Document\Tournament;
+use TournamentBundle\Repository\TeamsRepository;
 
 /**
  * Class DMPController
@@ -51,6 +53,53 @@ class DMPController extends TournamentManagerController
         $round = $this->getCurrentRound();
 
         return $this->render('TournamentBundle:DMP:time.html.twig', ['round' => $round, 'timeForRound' => self::TIME_FOR_ROUND]);
+    }
+
+    /**
+     * @Route("/standings/{roundNo}")
+     */
+    public function standingsAfterRound(int $roundNo)
+    {
+        $this->setDMP();
+
+        if ($roundNo >= $this->dmp->getActiveRound() && $this->dmp->getStatus() != 'FINISHED') {
+            throw $this->createNotFoundException('Round not yet finished. Standings will be available once round is finished.');
+        }
+
+        /** @var TeamsRepository $teamRepository */
+        $teamRepository = $this->getTMRepository('Team');
+        $teams = $teamRepository->getStandings($this->dmp->getId());
+
+        foreach ($teams as $team) {
+            /** @var Team $team */
+            $team->recalculateResultsForRound($roundNo);
+        }
+
+        usort($teams, function(Team $team1, Team $team2) {
+           if ($team1->getBattlePoints() > $team2->getBattlePoints()) {
+               return 1;
+           }
+
+           if ($team1->getBattlePoints() == $team2->getBattlePoints()) {
+               if ($team1->getMatchPoints() > $team2->getMatchPoints()) {
+                   return 1;
+               }
+
+               if ($team1->getMatchPoints() == $team2->getMatchPoints()) {
+                   return 0;
+               }
+           }
+
+            return -1;
+        });
+
+        $teams = array_reverse($teams);
+
+        return $this->render('TournamentBundle:Standings:round.html.twig', [
+            'tournament' => $this->dmp,
+            'roundNo' => $roundNo,
+            'teams' => $teams,
+        ]);
     }
 
     private function setDMP()
