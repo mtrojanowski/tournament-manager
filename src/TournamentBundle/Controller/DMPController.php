@@ -2,6 +2,7 @@
 namespace TournamentBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
+use TournamentBundle\DMP\Scenarios;
 use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\Tournament;
@@ -14,7 +15,7 @@ use TournamentBundle\Repository\TeamsRepository;
  */
 class DMPController extends TournamentManagerController
 {
-    const TOURNAMENT_ID = "597b3fe3fe9c9c000d0a3c01";
+    const TOURNAMENT_ID = "59918d28b018ad000c3aeb71";
     const TIME_FOR_ROUND = "+3 hours 15 minutes";
 
     /** @var Tournament */
@@ -99,6 +100,19 @@ class DMPController extends TournamentManagerController
             'tournament' => $this->dmp,
             'roundNo' => $roundNo,
             'teams' => $teams,
+        ]);
+    }
+
+    /**
+     * @Route("/scenarios")
+     */
+    public function scenariosForRound()
+    {
+        $this->setDMP();
+
+        return $this->render('TournamentBundle:DMP:scenarios.html.twig', [
+            'roundNo' => $this->dmp->getActiveRound(),
+            'scenarios' => Scenarios::SCENARIOS[$this->dmp->getActiveRound()]
         ]);
     }
 
