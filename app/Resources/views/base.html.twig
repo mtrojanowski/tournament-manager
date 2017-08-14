@@ -36,6 +36,7 @@
         {% endfor %}
     </div>
     <div class="container" role="main">
+        {% block navigation %}{% endblock %}
         {% block body %}{% endblock %}
     </div>
     {% block javascripts %}{% endblock %}

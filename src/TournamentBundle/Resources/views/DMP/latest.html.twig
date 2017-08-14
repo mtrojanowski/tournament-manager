@@ -1,0 +1,9 @@
+{% extends 'TournamentBundle:DMP:base.html.twig' %}
+
+{% block body %}
+    {% set round = tournament.activeRound %}
+    <div class="page-header">
+        <h3>Latest standings for round: {{ round }} (teams with results entered for current round are marked in green)</h3>
+    </div>
+    {% include 'TournamentBundle:Standings:standings.html.twig' %}
+{% endblock %}

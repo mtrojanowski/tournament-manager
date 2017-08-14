@@ -22,42 +22,79 @@ class DMPController extends TournamentManagerController
     private $dmp;
 
     /**
-     * @Route("/pairings")
+     * @Route("/pairings", name="dmp_current_pairing")
      */
     public function currentPairingsAction()
     {
-        return $this->pairings('TournamentBundle:DMP:pairings.html.twig');
+        $this->setDMP();
+        return $this->pairings(
+            'TournamentBundle:DMP:pairings.html.twig',
+            null,
+            $this->getMenuData('dmp_current_pairings')
+        );
     }
 
     /**
-     * @Route("/pairings/{round}")
+     * @Route("/pairings/{round}", name="dmp_pairings_for_round")
      */
     public function pairingsForRoundAction(int $round)
     {
-        return $this->pairings('TournamentBundle:DMP:pairings.html.twig', $round);
+        $this->setDMP();
+        return $this->pairings(
+            'TournamentBundle:DMP:pairings.html.twig',
+            $round,
+            $this->getMenuData('dmp_pairings_for_round')
+        );
     }
 
     /**
-     * @Route("/projector_pairings")
+     * @Route("/projector_pairings", name="dmp_projector_pairings")
      */
     public function currentProjectorPairingsAction()
     {
-        return $this->pairings('TournamentBundle:DMP:projector_pairings.html.twig');
+        $this->setDMP();
+        return $this->pairings(
+            'TournamentBundle:DMP:projector_pairings.html.twig',
+            null,
+            $this->getMenuData('dmp_projector_pairings')
+        );
     }
 
     /**
-     * @Route("/time")
+     * @Route("/time", name="dmp_time")
      */
     public function currentTimeForRound()
     {
         $this->setDMP();
         $round = $this->getCurrentRound();
 
-        return $this->render('TournamentBundle:DMP:time.html.twig', ['round' => $round, 'timeForRound' => self::TIME_FOR_ROUND]);
+        return $this->render('TournamentBundle:DMP:time.html.twig', [
+            'round' => $round,
+            'timeForRound' => self::TIME_FOR_ROUND,
+            'menuData' => $this->getMenuData('dmp_time'),
+        ]);
     }
 
     /**
-     * @Route("/standings/{roundNo}")
+     * @Route("/standings", name="dmp_latest_standings")
+     */
+    public function latestStandings()
+    {
+        $this->setDMP();
+
+        /** @var TeamsRepository $teamRepository */
+        $teamRepository = $this->getTMRepository('Team');
+        $teams = $teamRepository->getStandings(self::TOURNAMENT_ID);
+
+        return $this->render('TournamentBundle:DMP:latest.html.twig', [
+            'tournament' => $this->dmp,
+            'teams' => $teams,
+            'menuData' => $this->getMenuData('dmp_latest_standings')
+        ]);
+    }
+
+    /**
+     * @Route("/standings/{roundNo}", name="dmp_standings_for_round")
      */
     public function standingsAfterRound(int $roundNo)
     {
@@ -100,11 +137,12 @@ class DMPController extends TournamentManagerController
             'tournament' => $this->dmp,
             'roundNo' => $roundNo,
             'teams' => $teams,
+            'menuData' => $this->getMenuData('dmp_standings_for_round')
         ]);
     }
 
     /**
-     * @Route("/scenarios")
+     * @Route("/scenarios", name="dmp_scenarios")
      */
     public function scenariosForRound()
     {
@@ -112,16 +150,20 @@ class DMPController extends TournamentManagerController
 
         return $this->render('TournamentBundle:DMP:scenarios.html.twig', [
             'roundNo' => $this->dmp->getActiveRound(),
-            'scenarios' => Scenarios::SCENARIOS[$this->dmp->getActiveRound()]
+            'scenarios' => Scenarios::SCENARIOS[$this->dmp->getActiveRound()],
+            'menuData' => $this->getMenuData('dmp_scenarios')
         ]);
     }
 
     /**
-     * @Route("/vp")
+     * @Route("/vp", name="dmp_vp")
      */
     public function victoryPoints()
     {
-        return $this->render('TournamentBundle:DMP:victory_points.html.twig');
+        $this->setDMP();
+        return $this->render('TournamentBundle:DMP:victory_points.html.twig', [
+            'menuData' => $this->getMenuData('dmp_vp')
+        ]);
     }
 
     private function setDMP()
@@ -143,9 +185,8 @@ class DMPController extends TournamentManagerController
         return $round;
     }
 
-    private function pairings(string $templateName, int $roundNo = null)
+    private function pairings(string $templateName, int $roundNo = null, $menuData)
     {
-        $this->setDMP();
         if (empty($roundNo)) {
             $round = $this->getCurrentRound();
         } else {
@@ -156,9 +197,76 @@ class DMPController extends TournamentManagerController
             $templateName,
             [
                 'pairings' => $round->getTables(),
-                'roundNo' => $roundNo,
+                'roundNo' => $round->getRoundNo(),
                 'roundVerified' => $round->getVerified(),
-                'numPairings' => count($round->getTables())
+                'numPairings' => count($round->getTables()),
+                'menuData' => $menuData
             ]);
+    }
+
+    private function getMenuData($active)
+    {
+        return [
+            'menuList' => [
+                [
+                    'name' => 'Time',
+                    'route' => 'dmp_time',
+                    'params' => []
+                ],
+                [
+                    'name' => 'Latest standings',
+                    'route' => 'dmp_latest_standings',
+                    'params' => []
+                ],
+                [
+                    'name' => 'Current pairings',
+                    'route' => 'dmp_current_pairing',
+                    'params' => []
+                ],
+                [
+                    'name' => 'Scenarios',
+                    'route' => 'dmp_scenarios',
+                    'params' => []
+                ],
+                [
+                    'name' => 'Victory Points',
+                    'route' => 'dmp_vp',
+                    'params' => []
+                ],
+            ],
+            'menuRoundsPairings' => $this->getMenuRoundsPairings(),
+            'menuRoundsStandings' => $this->getMenuRoundsStandings(),
+
+            'active' => $active,
+        ];
+    }
+
+    private function getMenuRoundsPairings()
+    {
+        $rounds = [];
+
+        for ($i = 1; $i < $this->dmp->getActiveRound(); $i++) {
+            $rounds[] = [
+                'name' => 'Round ' . $i,
+                'route' => 'dmp_pairings_for_round',
+                'params' => ['round' => $i]
+            ];
+        }
+        return $rounds;
+    }
+
+
+    private function getMenuRoundsStandings()
+    {
+        $rounds = [];
+
+        for ($i = 1; $i < $this->dmp->getActiveRound(); $i++) {
+            $rounds[] = [
+                'name' => 'Round ' . $i,
+                'route' => 'dmp_standings_for_round',
+                'params' => ['roundNo' => $i]
+            ];
+        }
+        return $rounds;
     }
 }
