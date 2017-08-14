@@ -116,6 +116,14 @@ class DMPController extends TournamentManagerController
         ]);
     }
 
+    /**
+     * @Route("/vp")
+     */
+    public function victoryPoints()
+    {
+        return $this->render('TournamentBundle:DMP:victory_points.html.twig');
+    }
+
     private function setDMP()
     {
         $this->dmp = $this->getTournament(self::TOURNAMENT_ID);
