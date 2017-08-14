@@ -1,0 +1,49 @@
+{% extends 'TournamentBundle:DMP:base.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h2>PTC 2017 Pairings for round {{ roundNo }}</h2>
+    </div>
+    <div id="info">
+        {% if roundVerified == false %}
+            <div class="alert alert-warning" role="alert">
+                NOTICE The pairings have not been verified yet and may change before the round starts.
+            </div>
+        {% endif %}
+    </div>
+    <div id="pairings">
+        <div class="row">
+            <div class="col-lg-12, col-md-12, col-sm-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td>Table No</td>
+                        <td>Team name</td>
+                        <td>Country</td>
+                        <td>Club</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for table in pairings %}
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
+                            <td>{{ table.team1.teamName }}</td>
+                            <td>{{ table.team1.teamCountry }}</td>
+                            <td>{{ table.team1.teamClub }}</td>
+                        </tr>
+                        <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                            {% if (table.team2) %}
+                                <td>{{ table.team2.teamName }}</td>
+                                <td>{{ table.team2.teamCountry }}</td>
+                                <td>{{ table.team2.teamClub }}</td>
+                            {% else %}
+                                <td colspan="4">&nbsp;</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

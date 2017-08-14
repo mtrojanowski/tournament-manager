@@ -6,3 +6,147 @@
     margin-top: 1.43em;
     text-align: right;
 }
+
+.table_row_even {
+    background-color: #f9f9f9 !important;
+}
+
+.table_row_odd {
+    background-color: #ffffff !important;
+}
+
+.table_no {
+    width: 10%;
+    font-size: 3em;
+    font-weight: 400;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.pairing_alert {
+    background-color: #FF9A99;
+}
+
+#pairings input.form-control {
+    width: 50px;
+    display: inline;
+}
+
+#pairings .operations {
+    font-size: 0.9em;
+    color: #9e9e9e;
+}
+
+#pairings .operations .btn {
+    margin-left: 15px;
+}
+
+#timer {
+    font-size: 5em;
+    text-align: center;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    #timer {
+        font-size: 10em;
+    }
+}
+
+@media (min-width: 992px) {
+    #timer {
+        font-size: 15em;
+    }
+}
+
+@media (min-width: 1200px) {
+    #timer {
+        font-size: 20em;
+    }
+}
+
+.timer_description {
+    font-size: 2em;
+}
+
+.timer_description span {
+    font-weight: 400;
+    font-size: 1.2em;
+}
+
+.time-passed {
+    color: #8B1600;
+}
+
+.pairings_table_no {
+    width: 10%;
+}
+.pairings_team_name {
+    width: 30%;
+}
+
+.pairings_team_country {
+    width: 15%;
+}
+
+.pairings_team_club {
+    width: 15%;
+}
+
+#pairings .operations .btn {
+    margin-top: 0em;
+}
+
+
+#pairings .operations .btn-bye {
+    margin-top: 0;
+}
+
+.results-set {
+    background-color: #BAFFAD;
+}
+
+.results-not-set {
+    background-color: #fff548;
+}
+
+.match-points {
+    font-size: 0.75em;
+}
+
+.standings-opponent {
+    font-size: 0.8em;
+}
+
+.standings-opponent-country {
+    font-style: italic;
+}
+
+.standings-round-penalty {
+    color: #AF372E;
+    font-size: 0.8em;
+}
+
+.opponents {
+    color: #9a9a9a;
+}
+
+td.opponents {
+    width: 20%;
+}
+
+.verify-round-team-name {
+    font-weight: 600;
+}
+
+.projector {
+}
+
+.projector-header {
+    margin: 5px;
+}
+
+.projector-header h2 {
+    font-size: 1.2em;
+    font-weight: 500;
+}

@@ -1,0 +1,39 @@
+{% extends 'TournamentBundle:Default:base.html.twig' %}
+
+{% block body %}
+<div class="page-header">
+    <h2>Final standings {{ tournament.name }}</h2>
+</div>
+<div id="standings" class="row">
+    <div class="col-lg-12, col-md-12, col-sm-12">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td class="">#</td>
+                    <td class="">Team name</td>
+                    <td class="">Country</td>
+                    <td class="">Club</td>
+                    <td class="">Final Points</td>
+                    <td class="">Battle Points</td>
+                    <td class="">Match Points</td>
+                    <td class="">Penalty</td>
+                </tr>
+            </thead>
+            <tbody>
+            {% for team in teams %}
+                <tr class="">
+                    <td class="">{{ loop.index }}</td>
+                    <td class="">{{ team.name }}</td>
+                    <td class="">{{ team.country }}</td>
+                    <td class="">{{ team.club }}</td>
+                    <td class="">{{ team.finalBattlePoints }}</td>
+                    <td class="">{{ team.battlePoints }}</td>
+                    <td class="">{{ team.matchPoints }}</td>
+                    <td class="">{{ team.penaltyPoints }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

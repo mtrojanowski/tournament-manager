@@ -1,9 +1,14 @@
 <?php
 namespace TournamentBundle\Document;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+use Doctrine\ORM\Mapping\Id;
+use TournamentBundle\Controller\TournamentController;
+use TournamentBundle\Service\PairingService;
+
 /**
- * @MongoDB\Document
+ * @MongoDB\Document(repositoryClass="TournamentBundle\Repository\TeamsRepository")
  */
 class Team
 {
@@ -53,6 +58,11 @@ class Team
     private $matchPoints;
 
     /**
+     * @MongoDB\Field(type="integer")
+     */
+    private $finalBattlePoints;
+
+    /**
      * @MongoDB\Field(type="string")
      */
     private $club;
@@ -61,15 +71,27 @@ class Team
      * @MongoDB\EmbedMany(targetDocument="Player")
      */
     private $members;
+
+    /**
+     * @MongoDB\EmbedMany(targetDocument="Result")
+     */
+    private $results;
+
     public function __construct()
     {
-        $this->members = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->members = new ArrayCollection();
+        $this->results = new ArrayCollection();
     }
-    
+
+    public function setId(string $id)
+    {
+        $this->id = $id;
+    }
+
     /**
      * Get id
      *
-     * @return id $id
+     * @return string $id
      */
     public function getId()
     {
@@ -255,9 +277,9 @@ class Team
     /**
      * Add member
      *
-     * @param TournamentBundle\Document\Player $member
+     * @param Player $member
      */
-    public function addMember(\TournamentBundle\Document\Player $member)
+    public function addMember(Player $member)
     {
         $this->members[] = $member;
     }
@@ -265,9 +287,9 @@ class Team
     /**
      * Remove member
      *
-     * @param TournamentBundle\Document\Player $member
+     * @param Player $member
      */
-    public function removeMember(\TournamentBundle\Document\Player $member)
+    public function removeMember(Player $member)
     {
         $this->members->removeElement($member);
     }
@@ -302,5 +324,166 @@ class Team
     public function getTournamentId()
     {
         return $this->tournamentId;
+    }
+
+    /**
+     * Add result
+     *
+     * @param Result $result
+     */
+    public function addResult(Result $result)
+    {
+        $this->results[] = $result;
+    }
+
+    public function setResultForRound(int $roundNo, Result $newResult)
+    {
+        $resultSet = false;
+
+        foreach ($this->results as $i => $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() === $roundNo) {
+                $resultSet = true;
+                $this->results[$i] = $newResult;
+                break;
+            }
+        }
+
+        if (!$resultSet) {
+            $this->results[] = $newResult;
+        }
+
+        $this->recalculateResults();
+    }
+
+    public function getResultForRound(int $roundNo):?Result
+    {
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() === $roundNo) {
+                return $result;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Remove result
+     *
+     * @param Result $result
+     */
+    public function removeResult(Result $result)
+    {
+        $this->results->removeElement($result);
+    }
+
+    /**
+     * Get results
+     *
+     * @return \Doctrine\Common\Collections\Collection $results
+     */
+    public function getResults()
+    {
+        return $this->results;
+    }
+
+    public function canPlayTogetherWith(Team $team2, bool $isFirstRound):bool {
+        if ($isFirstRound) {
+            if ($this->getCountry() !== PairingService::POLAND) {
+                return $this->getCountry() !== $team2->getCountry();
+            }
+
+            return $this->getClub() !== $team2->getClub();
+        }
+
+        foreach ($this->getResults() as $team1Result) {
+            /** @var Result $team1Result */
+            if ($team1Result->getOpponentId() === $team2->getId()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function hadByeBefore():bool {
+        foreach ($this->getResults() as $team1Result) {
+            /** @var Result $team1Result */
+            if ($team1Result->getOpponentId() === TournamentController::BYE) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getOpponents()
+    {
+        $opponents = [];
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            $opponents[] = $result->getOpponentName();
+        }
+
+        return $opponents;
+    }
+
+    /**
+     * Set finalMatchPoints
+     *
+     * @param integer $finalBattlePoints
+     * @return $this
+     */
+    public function setFinalBattlePoints($finalBattlePoints)
+    {
+        $this->finalBattlePoints = $finalBattlePoints;
+        return $this;
+    }
+
+    /**
+     * Get finalBattlePoints
+     *
+     * @return integer $finalBattlePoints
+     */
+    public function getFinalBattlePoints()
+    {
+        return $this->finalBattlePoints;
+    }
+
+    public function recalculateResultsForRound(int $round)
+    {
+        $this->battlePoints = 0;
+        $this->matchPoints = 0;
+        $this->penaltyPoints = 0;
+        $this->finalBattlePoints = 0;
+
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            if ($result->getRoundNo() > $round) {
+                continue;
+            }
+
+            $this->battlePoints += $result->getBattlePoints();
+            $this->matchPoints += $result->getMatchPoints();
+            $this->penaltyPoints += $result->getPenalty();
+            $this->finalBattlePoints += $result->getBattlePoints() - $result->getPenalty();
+        }
+    }
+
+    private function recalculateResults()
+    {
+        $this->battlePoints = 0;
+        $this->matchPoints = 0;
+        $this->penaltyPoints = 0;
+        $this->finalBattlePoints = 0;
+
+        foreach ($this->results as $result) {
+            /** @var Result $result */
+            $this->battlePoints += $result->getBattlePoints();
+            $this->matchPoints += $result->getMatchPoints();
+            $this->penaltyPoints += $result->getPenalty();
+            $this->finalBattlePoints += $result->getBattlePoints() - $result->getPenalty();
+        }
     }
 }
