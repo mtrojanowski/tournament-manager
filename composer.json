@@ -19,9 +19,15 @@
             "vendor/symfony/symfony/src/Symfony/Component/VarDumper/Resources/functions/dump.php"
         ]
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/alcaeus/mongo-php-adapter"
+        }
+    ],
     "require": {
         "php": ">=5.5.9",
-        "alcaeus/mongo-php-adapter": "^1.1",
+        "alcaeus/mongo-php-adapter": "dev-composer-replace",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
         "doctrine/mongodb-odm": "^1.1",
@@ -36,9 +42,6 @@
         "symfony/symfony": "3.2.*",
         "twbs/bootstrap": "^3.3",
         "twig/twig": "^1.0||^2.0"
-    },
-    "replace": {
-        "ext-mongo": "1.6.14"
     },
     "require-dev": {
         "phpunit/phpunit": "^6.1",
