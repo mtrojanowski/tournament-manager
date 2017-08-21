@@ -394,7 +394,7 @@ class Team
                 return $this->getCountry() !== $team2->getCountry();
             }
 
-            return $this->getClub() !== $team2->getClub();
+            return $this->getClub() !== '.' && $this->getClub() !== $team2->getClub();
         }
 
         foreach ($this->getResults() as $team1Result) {
