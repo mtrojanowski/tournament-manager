@@ -20,7 +20,7 @@
         ]
     },
     "require": {
-        "php": ">=5.5.9",
+        "php": "7.1.8",
         "alcaeus/mongo-php-adapter": "^1.1",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/doctrine-cache-bundle": "^1.2",
