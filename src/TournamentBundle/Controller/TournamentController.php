@@ -36,7 +36,7 @@ class TournamentController extends TournamentManagerController
         $tournament->setActiveRound(1);
         $dm->persist($tournament);
 
-        $teams = $this->getTMRepository('Team')->findBy(['tournamentId' => $tournamentId, 'confirmedDay1' => true]);
+        $teams = $this->getTMRepository('Team')->findBy(['tournamentId' => $tournamentId]);
 
         shuffle($teams);
         shuffle($teams);
