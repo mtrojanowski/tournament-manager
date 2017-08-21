@@ -46,16 +46,21 @@
 {% endblock %}
 
 {% block body %}
-    <div class="page-header">
-        <h2>Time left for round {{ round.roundNo }} <span id="timer_header"></span></h2>
-
-    </div>
-    <div class="row" id="timer_wrapper">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="timer"></div>
-    </div>
-    <div class="row timer_description">
-        <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 round_started">
-            Round started at: <span>{{ round.startedAt|date('H:i', 'Europe/Warsaw') }}</span>
+        <div class="page-header">
+            {% if round.started %}
+                <h2>Time left for round {{ round.roundNo }} <span id="timer_header"></span></h2>
+            {% else %}
+                <h2>Round not started yet</h2>
+            {% endif %}
         </div>
-    </div>
+    {% if round.started %}
+        <div class="row" id="timer_wrapper">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="timer"></div>
+        </div>
+        <div class="row timer_description">
+            <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12 round_started">
+                Round started at: <span>{{ round.startedAt|date('H:i', 'Europe/Warsaw') }}</span>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

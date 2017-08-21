@@ -11,18 +11,18 @@ use TournamentBundle\Repository\TeamsRepository;
 /**
  * Class DMPController
  * @package TournamentBundle\Controller
- * @Route("/dmp")
+ * @Route("/")
  */
 class DMPController extends TournamentManagerController
 {
-    const TOURNAMENT_ID = "5991b498afc39c000e1ae5b2";
+    const TOURNAMENT_ID = "599b5a6ce2cadb0070660671";
     const TIME_FOR_ROUND = "+3 hours 15 minutes";
 
     /** @var Tournament */
     private $dmp;
 
     /**
-     * @Route("/pairings", name="dmp_current_pairing")
+     * @Route("", name="dmp_current_pairing")
      */
     public function currentPairingsAction()
     {
@@ -171,9 +171,13 @@ class DMPController extends TournamentManagerController
         $this->dmp = $this->getTournament(self::TOURNAMENT_ID);
     }
 
-    private function getCurrentRound():Round
+    private function getCurrentRound():?Round
     {
-        return $this->getRound($this->dmp->getActiveRound());
+        if ($this->dmp->getActiveRound()) {
+            return $this->getRound($this->dmp->getActiveRound());
+        }
+
+        return null;
     }
 
     private function getRound(int $roundNo):Round
