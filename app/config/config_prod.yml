@@ -10,7 +10,7 @@ imports:
 doctrine_mongodb:
     connections:
         default:
-            server: "%%env(MONGODB_URI)"
+            server: "%env(MONGODB_URI)%"
             options: {}
 monolog:
     handlers:
