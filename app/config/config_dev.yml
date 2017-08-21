@@ -32,3 +32,6 @@ monolog:
 
 #swiftmailer:
 #    delivery_addresses: ['me@example.com']
+
+doctrine_mongodb:
+    default_database: tm
