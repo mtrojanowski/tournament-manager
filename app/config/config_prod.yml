@@ -12,6 +12,8 @@ doctrine_mongodb:
         default:
             server: "%env(MONGODB_URI)%"
             options: {}
+    default_database: heroku_kt9bttgx
+
 monolog:
     handlers:
         main:
