@@ -20,7 +20,7 @@
                         <tbody>
                         {% for index in 0..9 %}
                             {% set tableNo = column * 10 + index %}
-                            {% if tableNo < numPairings %}{% set table = pairings[tableNo] %}{% else %}{% set table = pairings[0] %}{% endif %}
+                            {% if tableNo < numPairings %}{% set table = pairings[tableNo] %}{% else %}{% set table = null %}{% endif %}
                             {% if table != null %}
                                 <tr class="{{ cycle(['table_row_even', 'table_row_odd'], tableNo) }}">
                                     <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
