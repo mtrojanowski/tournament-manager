@@ -10,7 +10,11 @@
     <!-- Bootstrap -->
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     {% block stylesheets %}{% endblock %}
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+
+    <link rel="icon" href="{{ asset('favicon-16.png') }}" sizes="16x16" type="image/png">
+    <link rel="icon" href="{{ asset('favicon-32.png') }}" sizes="32x32" type="image/png">
+    <link rel="icon" href="{{ asset('favicon-48.png') }}" sizes="48x48" type="image/png">
+    <link rel="icon" href="{{ asset('favicon-62.png') }}" sizes="62x62" type="image/png">
 
     <link href="/css/bootstrap-theme.min.css" rel="stylesheet">
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
