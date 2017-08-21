@@ -7,6 +7,11 @@ imports:
 #        result_cache_driver: apc
 #        query_cache_driver: apc
 
+doctrine_mongodb:
+    connections:
+        default:
+            server: "%%env(MONGODB_URI)"
+            options: {}
 monolog:
     handlers:
         main:
@@ -15,7 +20,7 @@ monolog:
             handler: nested
         nested:
             type: stream
-            path: '%kernel.logs_dir%/%kernel.environment%.log'
+            path: 'php://stderr'
             level: debug
         console:
             type: console

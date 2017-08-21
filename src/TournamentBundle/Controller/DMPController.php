@@ -15,7 +15,7 @@ use TournamentBundle\Repository\TeamsRepository;
  */
 class DMPController extends TournamentManagerController
 {
-    const TOURNAMENT_ID = "59918d28b018ad000c3aeb71";
+    const TOURNAMENT_ID = "5991b498afc39c000e1ae5b2";
     const TIME_FOR_ROUND = "+3 hours 15 minutes";
 
     /** @var Tournament */
