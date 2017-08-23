@@ -5,11 +5,11 @@
 + DMP: what scenario do I play?
 + DMP: VP brackets
 + menu for DMP pages
-* RWD for DMP pages
++ RWD for DMP pages (standings)
 
-* deploy in heroku
++ deploy in heroku
 
-* verify if verify_round works well with duplicated bye
++ verify if verify_round works well with duplicated bye
 
 * submit pairings for a given round
 

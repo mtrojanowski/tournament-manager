@@ -1,5 +1,5 @@
 <div id="standings" class="row">
-    <div class="col-lg-12, col-md-12, col-sm-12">
+    <div class="col-lg-12, col-md-12, col-sm-12, hidden-xs">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -49,4 +49,37 @@
             </tbody>
         </table>
     </div>
+    {% for team in teams %}
+        {% set currentRoundResult = team.getResultForRound(round) %}
+        <div id="{{ team.id }}" class="dmp-standings col-xs-12 hidden-sm hidden-md hidden-lg dmp-battle-result {{ cycle(['table_row_even', 'table_row_odd'], loop.index) }}">
+            <div class="row">
+                <div class="col-xs-1 dmp-xs-standing">{{ loop.index }}</div>
+                <div class="col-xs-8 {% if currentRoundResult != null %} results-set-xs {% else %} results-not-set-xs {% endif %} dmp-team-name">{{ team.name }}</div>
+                <div class="col-xs-3 dmp-country">{{ team.country }}</div>
+                <div class="col-xs-offset-1 col-xs-11 row">
+                    <div class="col-xs-6">{{ team.club }}</div>
+                    <div class="col-xs-2 dmp-bp">{{ team.battlePoints }}</div>
+                    <div class="col-xs-2 dmp-mp">{{ team.matchPoints }}</div>
+                    <div class="col-xs-2 dmp-pp">{{ team.penaltyPoints }}</div>
+                </div>
+                {% for i in 1..round %}
+                    {% set teamResult = team.getResultForRound(i) %}
+                    {% if i < round or teamResult != null %}
+                        <div class="col-xs-11 col-xs-offset-1 row">
+                            <div class="col-xs-12 dmp-battle">
+                                Battle {{ i }}
+                            </div>
+                            <div class="col-xs-6 dmp-opponent">
+                                <a href="#{{ teamResult.opponentId }}">{{ teamResult.opponentName }}</a>
+                                {% if teamResult.opponentCountry != null %}<span class="standings-opponent-country">({{ teamResult.opponentCountry }})</span>{% endif %}
+                            </div>
+                            <div class="col-xs-2 dmp-bp dmp-points">{{ teamResult.battlePoints }}</div>
+                            <div class="col-xs-2 dmp-mp dmp-points">{{ teamResult.matchPoints }}</div>
+                            <div class="col-xs-2 dmp-pp dmp-points">{% if teamResult.penalty %}{{ teamResult.penalty }}{% else %}0{% endif %}</div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
 </div>

@@ -8,7 +8,7 @@
 }
 
 .table_row_even {
-    background-color: #f9f9f9 !important;
+    background-color: #eaeaea !important;
 }
 
 .table_row_odd {
@@ -149,4 +149,59 @@ td.opponents {
 .projector-header h2 {
     font-size: 1.2em;
     font-weight: 500;
+}
+
+.dmp-bp {
+    background: #9DD999;
+}
+
+.dmp-mp {
+    background: #d9cb96;
+}
+.dmp-pp {
+    background: #D99497;
+}
+
+.dmp-battle {
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.25em;
+    font-weight: 600;
+}
+
+.dmp-xs-standing {
+    font-weight: 800;
+    font-size: 1.8em;
+}
+
+.dmp-battle-result {
+    border-bottom: 1px solid #626262;
+}
+
+.dmp-points {
+    text-align: center;
+}
+
+.dmp-standings {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.dmp-opponent {
+    padding-left: 0;
+}
+
+.dmp-team-name {
+    font-weight: 600;
+}
+
+.dmp-country {
+    font-weight: 600;
+}
+
+.results-not-set-xs {
+}
+
+.results-set-xs {
+    color: #2b8926;
 }

@@ -33,7 +33,7 @@
                         {% set alertClass = "" %}
                         {% set team1 = teams[table.team1.teamId] %}
                         {% if round.roundNo == 1 %}
-                            {% if table.team2 and ((table.team1.teamCountry != 'Poland' and table.team1.teamCountry == table.team2.teamCountry) or (table.team1.teamCountry == 'Poland' and table.team1.teamClub == table.team2.teamClub)) %}
+                            {% if table.team2 and ((table.team1.teamCountry != 'Poland' and table.team1.teamCountry == table.team2.teamCountry) or (table.team1.teamCountry == 'Poland' and table.team1.teamClub != '.' and table.team1.teamClub == table.team2.teamClub)) %}
                                 {% set alertClass = "pairing_alert" %}
                             {% endif %}
                         {% else %}

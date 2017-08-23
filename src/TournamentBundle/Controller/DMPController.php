@@ -133,7 +133,7 @@ class DMPController extends TournamentManagerController
 
         $teams = array_reverse($teams);
 
-        return $this->render('TournamentBundle:Standings:round.html.twig', [
+        return $this->render('TournamentBundle:DMP:round.html.twig', [
             'tournament' => $this->dmp,
             'roundNo' => $roundNo,
             'teams' => $teams,
@@ -163,6 +163,23 @@ class DMPController extends TournamentManagerController
         $this->setDMP();
         return $this->render('TournamentBundle:DMP:victory_points.html.twig', [
             'menuData' => $this->getMenuData('dmp_vp')
+        ]);
+    }
+
+    /**
+     * @Route("/final-standings", name="dmp_final_standings")
+     */
+    public function finalStandings()
+    {
+        $this->setDMP();
+
+        /** @var TeamsRepository $teamRepository */
+        $teamRepository = $this->getTMRepository('Team');
+        $teams = $teamRepository->getFinalStandings($this->dmp->getId());
+
+        return $this->render('TournamentBundle:Standings:final.html.twig', [
+            'tournament' => $this->dmp,
+            'teams' => $teams
         ]);
     }
 
