@@ -209,3 +209,7 @@ td.opponents {
 .projector_base {
     width: 100%;
 }
+
+.projector_base .table_row_even, .projector_base .table_row_odd {
+    font-weight: 800;
+}
