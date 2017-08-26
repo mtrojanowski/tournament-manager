@@ -1,4 +1,4 @@
-{% extends 'TournamentBundle:DMP:base.html.twig' %}
+{% extends 'TournamentBundle:DMP:projector_base.html.twig' %}
 
 {% block body %}
     <div class="projector-header">
@@ -6,8 +6,8 @@
     </div>
     <div id="pairings">
         <div class="row">
-            {% for column in 0..1 %}
-                <div class="col-lg-6, col-md-6, col-sm-6, col-xs-6">
+            {% for column in 0..2 %}
+                <div class="col-lg-4, col-md-4, col-sm-4, col-xs-4">
                     <table class="table table-striped projector">
                         <thead>
                         <tr>
@@ -18,11 +18,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for index in 0..9 %}
-                            {% set tableNo = column * 10 + index %}
+                        {% for index in 0..4 %}
+                            {% set tableNo = column * 5 + index %}
                             {% if tableNo < numPairings %}{% set table = pairings[tableNo] %}{% else %}{% set table = null %}{% endif %}
                             {% if table != null %}
-                                <tr class="{{ cycle(['table_row_even', 'table_row_odd'], tableNo) }}">
+                                <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
                                     <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
                                     <td>{{ table.team1.teamName }}</td>
                                     <td>{{ table.team1.teamCountry }}</td>

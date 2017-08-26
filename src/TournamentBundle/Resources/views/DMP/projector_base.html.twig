@@ -1,0 +1,43 @@
+{% extends 'TournamentBundle:Default:projector_base.html.twig' %}
+
+{% block title %}Polish Team Championship 2017{% endblock %}
+
+{% block navigation %}
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path("dmp_time") }}">PTC</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    {% for menuEntry in menuData.menuList %}
+                        <li class="{% if menuData.active == menuEntry.route %}active{% endif %}"><a href="{{ path(menuEntry.route, menuEntry.params) }}">{{ menuEntry.name }} {% if menuData.active == menuEntry.route %}<span class="sr-only">(current)</span>{% endif %}</a></li>
+                    {% endfor %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Previous Pairings <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for pairingsEntry in menuData.menuRoundsPairings %}
+                                <li class="{% if menuData.active == pairingsEntry.route %}active{% endif %}"><a href="{{ path(pairingsEntry.route, pairingsEntry.params) }}">{{ pairingsEntry.name }} {% if menuData.active == pairingsEntry.route %}<span class="sr-only">(current)</span>{% endif %}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Previous Standings <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            {% for standingsEntry in menuData.menuRoundsStandings %}
+                                <li class="{% if menuData.active == standingsEntry.route %}active{% endif %}"><a href="{{ path(standingsEntry.route, standingsEntry.params) }}">{{ standingsEntry.name }} {% if menuData.active == standingsEntry.route %}<span class="sr-only">(current)</span>{% endif %}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+{% endblock %}
