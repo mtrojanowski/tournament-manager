@@ -1,6 +1,8 @@
 <?php
 namespace TournamentBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
+
 use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\Tournament;
