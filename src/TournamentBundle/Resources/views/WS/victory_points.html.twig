@@ -1,0 +1,63 @@
+{% extends 'TournamentBundle:WS:base.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <h3>Victory Points Brackets</h3>
+
+    </div>
+    <div class="row" id="timer_wrapper">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" >
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Points difference</th>
+                        <th>Winner</th>
+                        <th>Loser</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>0-225 VP</td>
+                        <td>10</td>
+                        <td>10</td>
+                    </tr>
+                    <tr>
+                        <td>226-450 VP</td>
+                        <td>11</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td>451-900 VP</td>
+                        <td>12</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>901-1350 VP</td>
+                        <td>13</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>1351-1800 VP</td>
+                        <td>14</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>1801-2250 VP</td>
+                        <td>15</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>2251-3150 VP</td>
+                        <td>16</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>≥3151 VP</td>
+                        <td>17</td>
+                        <td>3</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

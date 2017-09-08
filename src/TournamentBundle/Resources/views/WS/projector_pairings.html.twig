@@ -1,0 +1,50 @@
+{% extends 'TournamentBundle:WS:projector_base.html.twig' %}
+
+{% block body %}
+    <div style="height: 400px"></div>
+    <div class="projector-header">
+        <h2>PTC 2017 Pairings for round {{ roundNo }}</h2>
+    </div>
+    <div id="pairings">
+        <div class="row">
+            {% for column in 0..2 %}
+                <div class="col-lg-4, col-md-4, col-sm-4, col-xs-4">
+                    <table class="table table-striped projector">
+                        <thead>
+                        <tr>
+                            <td>Table</td>
+                            <td>Team name</td>
+                            <td>Country</td>
+                            <td>Club</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for index in 0..4 %}
+                            {% set tableNo = column * 5 + index %}
+                            {% if tableNo < numPairings %}{% set table = pairings[tableNo] %}{% else %}{% set table = null %}{% endif %}
+                            {% if table != null %}
+                                <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                                    <td class="table_no" rowspan="2">{{ table.tableNo }}</td>
+                                    <td>{{ table.team1.teamName }}</td>
+                                    <td>{{ table.team1.teamCountry }}</td>
+                                    <td>{{ table.team1.teamClub }}</td>
+                                </tr>
+                                <tr class="{% if loop.index % 2 == 0 %}table_row_even{% else %}table_row_odd{% endif %}">
+                                    {% if (table.team2) %}
+                                        <td>{{ table.team2.teamName }}</td>
+                                        <td>{{ table.team2.teamCountry }}</td>
+                                        <td>{{ table.team2.teamClub }}</td>
+                                    {% else %}
+                                        <td colspan="4">&nbsp;</td>
+                                    {% endif %}
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div style="height: 400px"></div>
+{% endblock %}
