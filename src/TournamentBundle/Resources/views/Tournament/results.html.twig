@@ -38,7 +38,8 @@
                             <td class="pairings_team_club">{{ table.team1.teamClub }}</td>
                             <td class="pairings_operations">
                                 <div class="row operations">
-                                    MatchPoints: {{ form_widget(resultForms[table.tableNo].team1MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                    Points: {{ form_widget(resultForms[table.tableNo].team1MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                    Scenario: {{ form_widget(resultForms[table.tableNo].team1Scenario, {'attr': {'class': ''}}) }}
                                     Penalty: {{ form_widget(resultForms[table.tableNo].team1Penalty, {'attr': {'class': 'form-control'}}) }}
                                     {% if table.team2 == null %}
                                         {{ form_widget(resultForms[table.tableNo].submit, {'attr': {'class': 'btn btn-sm btn-default btn-bye'}}) }}
@@ -57,7 +58,8 @@
                                 <td>{{ table.team2.teamClub }}</td>
                                 <td>
                                     <div class="row operations">
-                                        MatchPoints: {{ form_widget(resultForms[table.tableNo].team2MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                        Points: {{ form_widget(resultForms[table.tableNo].team2MatchPoints, {'attr': {'class': 'form-control'}}) }}
+                                        Scenario: {{ form_widget(resultForms[table.tableNo].team2Scenario, {'attr': {'class': ''}}) }}
                                         Penalty: {{ form_widget(resultForms[table.tableNo].team2Penalty, {'attr': {'class': 'form-control'}}) }}
                                         {{ form_widget(resultForms[table.tableNo].submit, {'attr': {'class': 'btn btn-sm btn-default'}}) }}
                                     </div>

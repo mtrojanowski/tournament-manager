@@ -1,8 +1,6 @@
 <?php
 namespace TournamentBundle\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-
 /**
  * Class Result
  * @package TournamentBundle\Document
@@ -24,6 +22,11 @@ class Result
      * @MongoDB\Field(type="integer")
      */
     private $battlePoints;
+
+    /**
+     * @MongoDB\Field(type="boolean")
+     */
+    private $scenario;
 
     /**
      * @MongoDB\Field(type="integer")
@@ -198,4 +201,24 @@ class Result
     {
         return $this->opponentCountry;
     }
+
+    /**
+     * @return boolean
+     */
+    public function getScenario()
+    {
+        return $this->scenario;
+    }
+
+    /**
+     * @param boolean $scenario
+     * @return Result
+     */
+    public function setScenario($scenario)
+    {
+        $this->scenario = $scenario;
+        return $this;
+    }
+
+
 }

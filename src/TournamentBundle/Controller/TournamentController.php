@@ -10,7 +10,6 @@ use TournamentBundle\Form\SwitchTableType;
 use TournamentBundle\Form\TableResultType;
 use TournamentBundle\Repository\TeamsRepository;
 use TournamentBundle\Service\PairingService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use TournamentBundle\Service\ResultsService;
 
 
@@ -221,7 +220,7 @@ class TournamentController extends TournamentManagerController
         $resultsForm->handleRequest($request);
         $resultsData = $resultsForm->getData();
 
-        $updatedTable = $resultsService->setTableResult($round->getTable($resultsData['tableNo']), $resultsData);
+        $updatedTable = $resultsService->setTableSingleResult($round->getTable($resultsData['tableNo']), $resultsData);
         $round->setTable($resultsData['tableNo'], $updatedTable);
 
         /** @var Team $team1 */
@@ -237,6 +236,7 @@ class TournamentController extends TournamentManagerController
             ->setRoundNo($roundNo)
             ->setMatchPoints($updatedTable->getTeam1()->getMatchPoints())
             ->setBattlePoints($updatedTable->getTeam1()->getBattlePoints())
+            ->setScenario($updatedTable->getTeam1()->getScenario())
             ->setPenalty($updatedTable->getTeam1()->getPenalty());
 
         if ($updatedTable->getTeam2() !== null) {
@@ -270,6 +270,7 @@ class TournamentController extends TournamentManagerController
                 ->setRoundNo($roundNo)
                 ->setMatchPoints($updatedTable->getTeam2()->getMatchPoints())
                 ->setBattlePoints($updatedTable->getTeam2()->getBattlePoints())
+                ->setScenario($updatedTable->getTeam2()->getScenario())
                 ->setPenalty($updatedTable->getTeam2()->getPenalty())
                 ->setOpponentId($updatedTable->getTeam1()->getTeamId())
                 ->setOpponentName($updatedTable->getTeam1()->getTeamName())

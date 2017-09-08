@@ -1,8 +1,6 @@
 <?php
 namespace TournamentBundle\Document;
 
-use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
-
 /**
  * Class Table
  * @package TournamentBundle\Document
@@ -109,8 +107,10 @@ class Table
         return [
             'team1MatchPoints' => $this->team1->getMatchPoints(),
             'team1Penalty' => $this->team1->getPenalty(),
+            'team1Scenario' => $this->team1->getScenario(),
             'team2MatchPoints' => empty($this->team2) ? null : $this->team2->getMatchPoints() ,
             'team2Penalty' => empty($this->team2) ? null : $this->team2->getPenalty(),
+            'team2Scenario' => empty($this->team2) ? null : $this->team2->getScenario(),
             'tableNo' => $this->tableNo
         ];
     }
