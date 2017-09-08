@@ -1,39 +1,34 @@
-{% extends 'TournamentBundle:WS:base.html.twig' %}
-
-{% block body %}
-<div class="page-header">
-    <h2>Standings after round {{ roundNo }}</h2>
-</div>
 <div id="standings" class="row">
     <div class="col-lg-12, col-md-12, col-sm-12, hidden-xs">
         <table class="table table-striped">
             <thead>
-                <tr>
-                    <td class="">#</td>
-                    <td class="">Player</td>
-                    <td class="">City</td>
-                    <td class="">Club</td>
-                    {% for i in 1..roundNo %}
-                        <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span> <span class="standings-round-penalty">-PP</span>
+            <tr>
+                <td class="">#</td>
+                <td class="">Player</td>
+                <td class="">City</td>
+                <td class="">Club</td>
+                {% for i in 1..round %}
+                    <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span> <span class="standings-round-penalty">-PP</span>
                         <br/>
-                            <span class="standings-opponent">opponent</span>
-                        </td>
-                    {% endfor %}
-                    <td class="">Battle Points</td>
-                    <td class="">Match Points</td>
-                    <td class="">Penalty</td>
-                </tr>
+                        <span class="standings-opponent">opponent</span>
+                    </td>
+                {% endfor %}
+                <td class="">Battle Points</td>
+                <td class="">Match Points</td>
+                <td class="">Penalty</td>
+            </tr>
             </thead>
             <tbody>
             {% for team in teams %}
+                {% set currentRoundResult = team.getResultForRound(round) %}
                 <tr class="">
                     <td class="">{{ loop.index }}</td>
-                    <td class="">{{ team.name }}</td>
+                    <td class="{% if currentRoundResult != null %} results-set {% else %} results-not-set {% endif %}">{{ team.name }}</td>
                     <td class="">{{ team.country }}</td>
                     <td class="">{{ team.club }}</td>
-                    {% for i in 1..roundNo %}
+                    {% for i in 1..round %}
                         {% set teamResult = team.getResultForRound(i) %}
-                        {% if i < roundNo or teamResult != null %}
+                        {% if i < round or teamResult != null %}
                             <td>
                                 {{ teamResult.battlePoints }} <span class="match-points">({{ teamResult.matchPoints }})</span>
                                 {% if teamResult.penalty %}<span class="standings-round-penalty"> -{{ teamResult.penalty }}</span>{% endif %}
@@ -55,10 +50,11 @@
         </table>
     </div>
     {% for team in teams %}
+        {% set currentRoundResult = team.getResultForRound(round) %}
         <div id="{{ team.id }}" class="dmp-standings col-xs-12 hidden-sm hidden-md hidden-lg dmp-battle-result {{ cycle(['table_row_even', 'table_row_odd'], loop.index) }}">
             <div class="row">
                 <div class="col-xs-1 dmp-xs-standing">{{ loop.index }}</div>
-                <div class="col-xs-8 dmp-team-name">{{ team.name }}</div>
+                <div class="col-xs-8 {% if currentRoundResult != null %} results-set-xs {% else %} results-not-set-xs {% endif %} dmp-team-name">{{ team.name }}</div>
                 <div class="col-xs-3 dmp-country">{{ team.country }}</div>
                 <div class="col-xs-offset-1 col-xs-11 row">
                     <div class="col-xs-6">{{ team.club }}</div>
@@ -66,9 +62,9 @@
                     <div class="col-xs-2 dmp-mp">{{ team.matchPoints }}</div>
                     <div class="col-xs-2 dmp-pp">{{ team.penaltyPoints }}</div>
                 </div>
-                {% for i in 1..roundNo %}
+                {% for i in 1..round %}
                     {% set teamResult = team.getResultForRound(i) %}
-                    {% if i < roundNo or teamResult != null %}
+                    {% if i < round or teamResult != null %}
                         <div class="col-xs-11 col-xs-offset-1 row">
                             <div class="col-xs-12 dmp-battle">
                                 Battle {{ i }}
@@ -87,4 +83,3 @@
         </div>
     {% endfor %}
 </div>
-{% endblock %}

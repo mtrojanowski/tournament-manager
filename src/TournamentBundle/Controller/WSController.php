@@ -5,12 +5,11 @@ use TournamentBundle\Document\Round;
 use TournamentBundle\Document\Team;
 use TournamentBundle\Document\Tournament;
 use TournamentBundle\Repository\TeamsRepository;
-use TournamentBundle\ws\Scenarios;
 
 /**
  * Class wsController
  * @package TournamentBundle\Controller
- * @Route("/", host=="ws.dmp2017.pl")
+ * @Route("/", host="ws.dmp2017.pl")
  */
 class WSController extends TournamentManagerController
 {
@@ -137,20 +136,6 @@ class WSController extends TournamentManagerController
             'roundNo' => $roundNo,
             'teams' => $teams,
             'menuData' => $this->getMenuData('ws_standings_for_round')
-        ]);
-    }
-
-    /**
-     * @Route("/scenarios", name="ws_scenarios")
-     */
-    public function scenariosForRound()
-    {
-        $this->setWS();
-
-        return $this->render('TournamentBundle:WS:scenarios.html.twig', [
-            'roundNo' => $this->ws->getActiveRound(),
-            'scenarios' => Scenarios::SCENARIOS[$this->ws->getActiveRound()],
-            'menuData' => $this->getMenuData('ws_scenarios')
         ]);
     }
 
