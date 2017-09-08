@@ -11,7 +11,7 @@ use TournamentBundle\Repository\TeamsRepository;
 /**
  * Class wsController
  * @package TournamentBundle\Controller
- * @Route("/", host="ws.dmp2017.pl")
+ * @Route("/")
  */
 class WSController extends TournamentManagerController
 {
@@ -22,7 +22,7 @@ class WSController extends TournamentManagerController
     private $ws;
 
     /**
-     * @Route("", name="ws_current_pairing")
+     * @Route("", name="ws_current_pairing", host="ws.dmp2017.pl")
      */
     public function currentPairingsAction()
     {
@@ -35,7 +35,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/pairings/{round}", name="ws_pairings_for_round")
+     * @Route("/pairings/{round}", name="ws_pairings_for_round", host="ws.dmp2017.pl")
      */
     public function pairingsForRoundAction(int $round)
     {
@@ -48,7 +48,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/projector_pairings", name="ws_projector_pairings")
+     * @Route("/projector_pairings", name="ws_projector_pairings", host="ws.dmp2017.pl")
      */
     public function currentProjectorPairingsAction()
     {
@@ -61,7 +61,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/time", name="ws_time")
+     * @Route("/time", name="ws_time", host="ws.dmp2017.pl")
      */
     public function currentTimeForRound()
     {
@@ -76,7 +76,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/standings", name="ws_latest_standings")
+     * @Route("/standings", name="ws_latest_standings", host="ws.dmp2017.pl")
      */
     public function latestStandings()
     {
@@ -94,7 +94,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/standings/{roundNo}", name="ws_standings_for_round")
+     * @Route("/standings/{roundNo}", name="ws_standings_for_round", host="ws.dmp2017.pl")
      */
     public function standingsAfterRound(int $roundNo)
     {
@@ -142,7 +142,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/vp", name="ws_vp")
+     * @Route("/vp", name="ws_vp", host="ws.dmp2017.pl")
      */
     public function victoryPoints()
     {
@@ -153,7 +153,7 @@ class WSController extends TournamentManagerController
     }
 
     /**
-     * @Route("/final-standings", name="ws_final_standings")
+     * @Route("/final-standings", name="ws_final_standings", host="ws.dmp2017.pl")
      */
     public function finalStandings()
     {
