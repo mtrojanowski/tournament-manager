@@ -11,7 +11,7 @@ use TournamentBundle\Repository\TeamsRepository;
 /**
  * Class wsController
  * @package TournamentBundle\Controller
- * @Route("/")
+ * @Route("/t")
  */
 class WSController extends TournamentManagerController
 {
