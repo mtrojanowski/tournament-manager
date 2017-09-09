@@ -11,7 +11,6 @@ use TournamentBundle\Form\TableResultType;
 use TournamentBundle\Repository\TeamsRepository;
 use TournamentBundle\Service\PairingService;
 use TournamentBundle\Service\ResultsService;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
 
 
 /**
@@ -235,7 +234,7 @@ class TournamentController extends TournamentManagerController
         $resultForTeam1 = new Result();
         $resultForTeam1
             ->setRoundNo($roundNo)
-            ->setMatchPoints($updatedTable->getTeam1()->getMatchPoints())
+            ->setMatchPoints($updatedTable->getTeam1()->getMatchPoints() - $updatedTable->getTeam2()->getMatchPoints())
             ->setBattlePoints($updatedTable->getTeam1()->getBattlePoints())
             ->setScenario($updatedTable->getTeam1()->getScenario())
             ->setPenalty($updatedTable->getTeam1()->getPenalty());
@@ -269,7 +268,7 @@ class TournamentController extends TournamentManagerController
             $resultForTeam2 = new Result();
             $resultForTeam2
                 ->setRoundNo($roundNo)
-                ->setMatchPoints($updatedTable->getTeam2()->getMatchPoints())
+                ->setMatchPoints($updatedTable->getTeam2()->getMatchPoints() - $updatedTable->getTeam1()->getMatchPoints())
                 ->setBattlePoints($updatedTable->getTeam2()->getBattlePoints())
                 ->setScenario($updatedTable->getTeam2()->getScenario())
                 ->setPenalty($updatedTable->getTeam2()->getPenalty())
