@@ -16,7 +16,7 @@ use TournamentBundle\Repository\TeamsRepository;
 class WSController extends TournamentManagerController
 {
     const TOURNAMENT_ID = "59b2eb33129b6800706da701";
-    const TIME_FOR_ROUND = "+2 hours 57 minutes";
+    const TIME_FOR_ROUND = "+3 hours 00 minutes";
 
     /** @var Tournament */
     private $ws;
