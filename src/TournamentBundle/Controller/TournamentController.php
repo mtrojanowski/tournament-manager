@@ -11,6 +11,7 @@ use TournamentBundle\Form\TableResultType;
 use TournamentBundle\Repository\TeamsRepository;
 use TournamentBundle\Service\PairingService;
 use TournamentBundle\Service\ResultsService;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route as Route;
 
 
 /**
