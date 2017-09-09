@@ -1,6 +1,8 @@
 <?php
 namespace TournamentBundle\Document;
 
+use Doctrine\ODM\MongoDB\Mapping\Annotations as MongoDB;
+
 /**
  * Class Table
  * @package TournamentBundle\Document
