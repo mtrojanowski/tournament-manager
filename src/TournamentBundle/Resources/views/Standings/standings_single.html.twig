@@ -8,14 +8,14 @@
                 <td class="">City</td>
                 <td class="">Army</td>
                 {% for i in 1..round %}
-                    <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span> <span class="standings-round-penalty">-PP</span>
+                    <td class="">Round {{ i }} - BP <span class="match-points">(MP)</span>
                         <br/>
                         <span class="standings-opponent">opponent</span>
                     </td>
                 {% endfor %}
                 <td class="">Battle Points</td>
                 <td class="">Match Points</td>
-                <td class="">Penalty</td>
+                <td class="">Hobby Points</td>
             </tr>
             </thead>
             <tbody>
@@ -31,7 +31,6 @@
                         {% if i < round or teamResult != null %}
                             <td>
                                 {{ teamResult.battlePoints }} <span class="match-points">({{ teamResult.matchPoints }})</span>
-                                {% if teamResult.penalty %}<span class="standings-round-penalty"> -{{ teamResult.penalty }}</span>{% endif %}
                                 <br/>
                                 <span class="standings-opponent">{{ teamResult.opponentName }}
                                     {% if teamResult.opponentCountry != null %}<span class="standings-opponent-country">({{ teamResult.opponentCountry }})</span>{% endif %}
@@ -43,7 +42,7 @@
                     {% endfor %}
                     <td class="">{{ team.battlePoints }}</td>
                     <td class="">{{ team.matchPoints }}</td>
-                    <td class="">{{ team.penaltyPoints }}</td>
+                    <td class="">{{ -team.penaltyPoints }}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -60,7 +59,7 @@
                     <div class="col-xs-6">{{ team.club }}</div>
                     <div class="col-xs-2 dmp-bp">{{ team.battlePoints }}</div>
                     <div class="col-xs-2 dmp-mp">{{ team.matchPoints }}</div>
-                    <div class="col-xs-2 dmp-pp">{{ team.penaltyPoints }}</div>
+                    <div class="col-xs-2 dmp-pp">{{ -team.penaltyPoints }}</div>
                 </div>
                 {% for i in 1..round %}
                     {% set teamResult = team.getResultForRound(i) %}
@@ -73,9 +72,8 @@
                                 <a href="#{{ teamResult.opponentId }}">{{ teamResult.opponentName }}</a>
                                 {% if teamResult.opponentCountry != null %}<span class="standings-opponent-country">({{ teamResult.opponentCountry }})</span>{% endif %}
                             </div>
-                            <div class="col-xs-2 dmp-bp dmp-points">{{ teamResult.battlePoints }}</div>
-                            <div class="col-xs-2 dmp-mp dmp-points">{{ teamResult.matchPoints }}</div>
-                            <div class="col-xs-2 dmp-pp dmp-points">{% if teamResult.penalty %}{{ teamResult.penalty }}{% else %}0{% endif %}</div>
+                            <div class="col-xs-3 dmp-bp dmp-points">{{ teamResult.battlePoints }}</div>
+                            <div class="col-xs-3 dmp-mp dmp-points">{{ teamResult.matchPoints }}</div>
                         </div>
                     {% endif %}
                 {% endfor %}

@@ -16,7 +16,7 @@
                     <td class="">Final Points</td>
                     <td class="">Battle Points</td>
                     <td class="">Match Points</td>
-                    <td class="">Penalty</td>
+                    <td class="">Hobby Points</td>
                 </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                     <td class="">{{ team.finalBattlePoints }}</td>
                     <td class="">{{ team.battlePoints }}</td>
                     <td class="">{{ team.matchPoints }}</td>
-                    <td class="">{{ team.penaltyPoints }}</td>
+                    <td class="">{{ -team.penaltyPoints }}</td>
                 </tr>
             {% endfor %}
             </tbody>
