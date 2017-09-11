@@ -40,7 +40,7 @@ class TeamsRepository extends DocumentRepository
     {
         return $this->createQueryBuilder()
             ->field('tournamentId')->equals($tournamentId)
-            ->field('confirmedDay1')->equals(true)
+            ->field('confirmedDay2')->equals(true)
             ->sort('finalBattlePoints', -1)
             ->sort('battlePoints', -1)
             ->sort('matchPoints', -1)
